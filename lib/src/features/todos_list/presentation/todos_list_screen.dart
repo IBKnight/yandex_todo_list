@@ -1,10 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:yandex_todo_list/src/common/palette.dart';
 import 'package:yandex_todo_list/src/common/strings.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/todo_entity.dart';
 import 'package:yandex_todo_list/src/features/todos_list/presentation/widgets/todo_appbar.dart';
+import 'package:yandex_todo_list/src/features/todos_list/presentation/widgets/todo_tile.dart';
 
 class TodosListScreen extends StatefulWidget {
   const TodosListScreen({super.key});
@@ -13,23 +15,31 @@ class TodosListScreen extends StatefulWidget {
   State<TodosListScreen> createState() => _TodosListScreenState();
 }
 
-class _TodosListScreenState extends State<TodosListScreen>
-    with SingleTickerProviderStateMixin {
+class _TodosListScreenState extends State<TodosListScreen> {
   //? Mock todos
   final List<TodoEntity> mockList = List.generate(20, (index) {
     final random = Random();
 
-    List<TodoPriority> priorities = TodoPriority.values;
+    const String chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    String text = List.generate(random.nextInt(100) + 1,
+        (index) => chars[random.nextInt(chars.length)],).join();
+
+    List<String> priorities = ['low', 'basic', 'importance'];
 
     int randomIndex = random.nextInt(priorities.length);
-    TodoPriority randomPriority = priorities[randomIndex];
+    String randomPriority = priorities[randomIndex];
 
     return TodoEntity(
-      id: index,
-      description: (pow(index, 5)).hashCode.toString() * 25,
-      date: DateTime(2025),
-      priority: randomPriority,
-      isCompleted: random.nextBool(),
+      id: const Uuid().v4(),
+      text: text,
+      importance: randomPriority,
+      deadline: random.nextInt(1000000) + 10000000,
+      done: random.nextBool(),
+      color: null,
+      createdAt: random.nextInt(1000000) + 10000000,
+      changedAt: random.nextInt(1000000) + 10000000,
+      lastUpdatedBy: random.nextInt(100) + 1,
     );
   });
   //?
@@ -62,27 +72,16 @@ class _TodosListScreenState extends State<TodosListScreen>
                   BoxShadow(
                     offset: const Offset(0, 2),
                     color: const Color(0xFF000000).withOpacity(0.06),
-                  )
+                  ),
                 ],
               ),
               sliver: SliverList.builder(
                 itemCount: mockList.length + 1,
                 itemBuilder: (context, index) {
-                  // TodoEntity item = mockList[index];
                   if (index == mockList.length) {
                     return const Text(Strings.newTodos);
                   }
-                  return ListTile(
-                    title: Text(
-                      mockList[index].description,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                    subtitle: mockList[index].date != null
-                        ? const Text(Strings.date)
-                        : null,
-                  );
+                  return TodoTile(item: mockList[index]);
                 },
               ),
             ),

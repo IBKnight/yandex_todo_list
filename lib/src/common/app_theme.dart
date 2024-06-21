@@ -4,6 +4,7 @@ import 'package:yandex_todo_list/src/common/palette.dart';
 abstract class AppTheme {
   static ThemeData get lightTheme => ThemeData(
         useMaterial3: false,
+        shadowColor: Colors.red,
         textTheme: const TextTheme(
           //? Large title
           titleLarge: TextStyle(
