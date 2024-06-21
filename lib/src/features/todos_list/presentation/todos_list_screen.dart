@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:yandex_todo_list/src/common/palette.dart';
 import 'package:yandex_todo_list/src/common/strings.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/todo_entity.dart';
+import 'package:yandex_todo_list/src/features/todos_list/presentation/widgets/todo_appbar.dart';
 
 class TodosListScreen extends StatefulWidget {
   const TodosListScreen({super.key});
@@ -11,7 +13,9 @@ class TodosListScreen extends StatefulWidget {
   State<TodosListScreen> createState() => _TodosListScreenState();
 }
 
-class _TodosListScreenState extends State<TodosListScreen> {
+class _TodosListScreenState extends State<TodosListScreen>
+    with SingleTickerProviderStateMixin {
+  //? Mock todos
   final List<TodoEntity> mockList = List.generate(20, (index) {
     final random = Random();
 
@@ -28,27 +32,18 @@ class _TodosListScreenState extends State<TodosListScreen> {
       isCompleted: random.nextBool(),
     );
   });
+  //?
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F6F2),
+      backgroundColor: Palette.backPrimaryLight,
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(
-            backgroundColor: Color(0xFFF7F6F2),
+          SliverPersistentHeader(
+            delegate: TodoSliverPersistentDelegate(),
             pinned: true,
-            snap: false,
             floating: false,
-            expandedHeight: 160.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(Strings.myTodos),
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: Row(
-              children: [Text('вы')],
-            ),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(
@@ -75,16 +70,18 @@ class _TodosListScreenState extends State<TodosListScreen> {
                 itemBuilder: (context, index) {
                   // TodoEntity item = mockList[index];
                   if (index == mockList.length) {
-                    return Text(Strings.newTodos);
+                    return const Text(Strings.newTodos);
                   }
                   return ListTile(
                     title: Text(
                       mockList[index].description,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    subtitle:
-                        mockList[index].date != null ? const Text(Strings.date) : null,
+                    subtitle: mockList[index].date != null
+                        ? const Text(Strings.date)
+                        : null,
                   );
                 },
               ),
@@ -95,7 +92,10 @@ class _TodosListScreenState extends State<TodosListScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {}),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
