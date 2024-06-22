@@ -3,8 +3,19 @@ import 'package:yandex_todo_list/src/common/palette.dart';
 
 abstract class AppTheme {
   static ThemeData get lightTheme => ThemeData(
+        dividerTheme: const DividerThemeData(
+          thickness: 0.5,
+          color: Palette.separatorLight,
+        ),
         useMaterial3: false,
-        shadowColor: Colors.red,
+        checkboxTheme: const CheckboxThemeData(
+          fillColor: WidgetStatePropertyAll(Palette.backSecondaryLight),
+          side: BorderSide(color: Palette.separatorLight, width: 2),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+          outlineBorder: BorderSide.none,
+        ),
         textTheme: const TextTheme(
           //? Large title
           titleLarge: TextStyle(

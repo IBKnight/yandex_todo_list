@@ -5,7 +5,10 @@ abstract class Strings {
   static const String priority = 'Важность';
   static const String doUpTo = 'Сделать до';
   static const String delete = 'Удалить';
-  static const String save = 'Сохранить';
+  static const String save = 'СОХРАНИТЬ';
   static const String newTodos = 'Новое';
   static const String date = 'дата';
+  static const String basic = 'Нет';
+  static const String low = 'Низкий';
+  static const String important = '!! Высокий';
 }

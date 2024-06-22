@@ -15,14 +15,18 @@ dependencies:
 
 
   cupertino_icons: ^1.0.6
+
+
   uuid: ^4.4.0
+
+
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
   bloc_concurrency: ^0.2.2
 
+
   stream_transform: ^2.1.0
   rxdart: ^0.27.7
-
 
 
   logging: ^1.2.0
