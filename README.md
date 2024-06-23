@@ -17,4 +17,4 @@
     <img src="assets/screenshots/screenshot4.png" alt="Screenshot 4" style="width: 100px; margin-right: 10px;">
 </div>
 
-[Ссылочка на .apk]()
+[Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.1)
