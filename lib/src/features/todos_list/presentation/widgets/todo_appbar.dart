@@ -3,6 +3,16 @@ import 'package:yandex_todo_list/src/common/palette.dart';
 import 'package:yandex_todo_list/src/common/strings.dart';
 
 class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
+  final int completedCount;
+  final VoidCallback showCompleted;
+  final bool shownCompleted;
+
+  TodoSliverPersistentDelegate({
+    required this.showCompleted,
+    required this.completedCount,
+    required this.shownCompleted,
+  });
+
   @override
   Widget build(
     BuildContext context,
@@ -44,7 +54,7 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                Strings.completed,
+                '${Strings.completed} $completedCount',
                 style: TextStyle.lerp(
                   Theme.of(context)
                       .textTheme
@@ -72,9 +82,11 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
                 shape: const CircleBorder(),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
-                  onTap: () {},
-                  child: const Icon(
-                    Icons.visibility_off,
+                  onTap: () {
+                    showCompleted();
+                  },
+                  child: Icon(
+                    shownCompleted ? Icons.visibility : Icons.visibility_off,
                     size: 22.03,
                     color: Palette.blueLight,
                   ),

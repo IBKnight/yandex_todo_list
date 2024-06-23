@@ -18,19 +18,23 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
   TodoImportance _selectedImportance = TodoImportance.basic;
   DateTime? _dateTime;
   late bool _hasDeadline;
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
     if (widget.todoEntity != null) {
+      _textEditingController.text = widget.todoEntity!.text;
       _selectedImportance = TodoImportance.values
           .where(
-            (importance) =>
-                importance.importance == widget.todoEntity!.importance,
+            (importance) => importance == widget.todoEntity!.importance,
           )
           .first;
-      _dateTime = DateTime.fromMillisecondsSinceEpoch(
-        widget.todoEntity?.deadline ?? DateTime.now().millisecondsSinceEpoch,
-      );
+      _dateTime = widget.todoEntity?.deadline == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(
+              widget.todoEntity?.deadline ??
+                  DateTime.now().millisecondsSinceEpoch,
+            );
     }
 
     _hasDeadline = _dateTime != null;
@@ -101,6 +105,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
                 color: Palette.backElevatedLight,
               ),
               child: TextField(
+                controller: _textEditingController,
                 scrollPhysics: const NeverScrollableScrollPhysics(),
                 style: Theme.of(context).textTheme.bodyLarge,
                 decoration: const InputDecoration(
@@ -116,9 +121,8 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             const SizedBox(height: 12),
             ListTile(
               minTileHeight: 72,
-              contentPadding: const EdgeInsetsDirectional.symmetric(
-                horizontal: 16,
-              ),
+              contentPadding:
+                  const EdgeInsetsDirectional.symmetric(horizontal: 16),
               minLeadingWidth: 0,
               title: Text(
                 Strings.priority,
@@ -161,9 +165,8 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             ),
             ListTile(
               minTileHeight: 72,
-              contentPadding: const EdgeInsetsDirectional.symmetric(
-                horizontal: 16,
-              ),
+              contentPadding:
+                  const EdgeInsetsDirectional.symmetric(horizontal: 16),
               minLeadingWidth: 0,
               title: Text(
                 Strings.doUpTo,
@@ -203,6 +206,26 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             ),
             const SizedBox(height: 24),
             const Divider(),
+            ListTile(
+              enabled: widget.todoEntity != null,
+              minTileHeight: 48,
+              minLeadingWidth: 0,
+              titleAlignment: ListTileTitleAlignment.center,
+              leading: Icon(
+                Icons.delete,
+                color: widget.todoEntity != null
+                    ? Palette.redLight
+                    : Palette.labelDisableLight,
+              ),
+              title: Text(
+                Strings.delete,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: widget.todoEntity != null
+                          ? Palette.redLight
+                          : Palette.labelDisableLight,
+                    ),
+              ),
+            ),
           ],
         ),
       ),

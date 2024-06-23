@@ -1,1 +1,2 @@
-abstract interface class ITodoListRepository {}
+abstract interface class ITodoListRepository {
+}

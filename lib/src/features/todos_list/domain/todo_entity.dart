@@ -13,7 +13,7 @@ String todoEntityToJson(TodoEntity data) => json.encode(data.toJson());
 class TodoEntity {
   final String id;
   final String text;
-  final String importance;
+  final TodoImportance importance;
   final int? deadline;
   final bool done;
   final String? color;
@@ -37,7 +37,7 @@ class TodoEntity {
   TodoEntity copyWith({
     String? id,
     String? text,
-    String? importance,
+    TodoImportance? importance,
     int? deadline,
     bool? done,
     String? color,
@@ -60,7 +60,7 @@ class TodoEntity {
   factory TodoEntity.fromJson(Map<String, dynamic> json) => TodoEntity(
         id: json['id'],
         text: json['text'],
-        importance: json['importance'],
+        importance: TodoImportance.fromString(json['importance']),
         deadline: json['deadline'],
         done: json['done'],
         color: json['color'],
@@ -72,7 +72,7 @@ class TodoEntity {
   Map<String, dynamic> toJson() => {
         'id': id,
         'text': text,
-        'importance': importance,
+        'importance': importance.importance,
         'deadline': deadline,
         'done': done,
         'color': color,
@@ -80,6 +80,34 @@ class TodoEntity {
         'changed_at': changedAt,
         'last_updated_by': lastUpdatedBy,
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! TodoEntity) return false;
+    return id == other.id &&
+        text == other.text &&
+        importance == other.importance &&
+        deadline == other.deadline &&
+        done == other.done &&
+        color == other.color &&
+        createdAt == other.createdAt &&
+        changedAt == other.changedAt &&
+        lastUpdatedBy == other.lastUpdatedBy;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        text,
+        importance,
+        deadline,
+        done,
+        color,
+        createdAt,
+        changedAt,
+        lastUpdatedBy,
+      );
 }
 
 enum TodoImportance {
@@ -90,4 +118,16 @@ enum TodoImportance {
   const TodoImportance(this.title, this.importance);
   final String importance;
   final String title;
+
+  static TodoImportance fromString(String importance) {
+    switch (importance) {
+      case 'low':
+        return TodoImportance.low;
+      case 'important':
+        return TodoImportance.important;
+      case 'basic':
+      default:
+        return TodoImportance.basic;
+    }
+  }
 }

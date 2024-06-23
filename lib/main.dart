@@ -14,3 +14,6 @@ void main() {
     ),
   );
 }
+//? Просто лучший тутор на ютубе на тему Zone
+//? и как с их помощью хэндлить ошибки:
+//? https://www.youtube.com/watch?v=dQw4w9WgXcQ
