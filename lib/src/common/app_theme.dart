@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yandex_todo_list/src/common/palette.dart';
+import 'palette.dart';
 
 abstract class AppTheme {
   static ThemeData get lightTheme => ThemeData(

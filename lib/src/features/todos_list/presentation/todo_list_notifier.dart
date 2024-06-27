@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:yandex_todo_list/src/features/todos_list/domain/todo_entity.dart';
+import '../domain/entities/todo_entity.dart';
 
 /// Временное решение на [ChangeNotifier]
 /// и [ListenableBuilder] в остуствии нормальной бизнес логики

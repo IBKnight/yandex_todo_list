@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:yandex_todo_list/src/common/strings.dart';
-
 TodoEntity todoEntityFromJson(String str) =>
     TodoEntity.fromJson(json.decode(str));
 
@@ -111,13 +109,12 @@ class TodoEntity {
 }
 
 enum TodoImportance {
-  basic(Strings.basic, 'basic'),
-  low(Strings.low, 'low'),
-  important(Strings.important, 'important');
+  basic('basic'),
+  low('low'),
+  important('important');
 
-  const TodoImportance(this.title, this.importance);
+  const TodoImportance(this.importance);
   final String importance;
-  final String title;
 
   static TodoImportance fromString(String importance) {
     switch (importance) {

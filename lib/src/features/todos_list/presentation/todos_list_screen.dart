@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:yandex_todo_list/src/common/palette.dart';
-import 'package:yandex_todo_list/src/common/strings.dart';
-import 'package:yandex_todo_list/src/features/todo_item_edit/presentation/todo_item_edit_screen.dart';
-import 'package:yandex_todo_list/src/features/todos_list/presentation/todo_list_notifier.dart';
-import 'package:yandex_todo_list/src/features/todos_list/presentation/widgets/todo_appbar.dart';
-import 'package:yandex_todo_list/src/features/todos_list/presentation/widgets/todo_tile.dart';
+import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
+import '../../../common/palette.dart';
+import '../../todo_item_edit/presentation/todo_item_edit_screen.dart';
+import 'todo_list_notifier.dart';
+import 'widgets/todo_appbar.dart';
+import 'widgets/todo_tile.dart';
 
 class TodosListScreen extends StatefulWidget {
   const TodosListScreen({super.key});
@@ -87,7 +87,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
                             minTileHeight: 48,
                             leading: const SizedBox(),
                             title: Text(
-                              Strings.newTodos,
+                              AppLocalizations.of(context)!.newTodos,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge

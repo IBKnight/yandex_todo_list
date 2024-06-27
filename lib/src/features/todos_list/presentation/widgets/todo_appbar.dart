@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yandex_todo_list/src/common/palette.dart';
-import 'package:yandex_todo_list/src/common/strings.dart';
+import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
+import '../../../../common/palette.dart';
 
 class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
   final int completedCount;
@@ -19,6 +19,8 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
+    final strings = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final progress = shrinkOffset / maxExtent;
 
     return Container(
@@ -54,15 +56,11 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                '${Strings.completed} $completedCount',
+                '${strings.completed} $completedCount',
                 style: TextStyle.lerp(
-                  Theme.of(context)
-                      .textTheme
-                      .bodyLarge
+                  theme.textTheme.bodyLarge
                       ?.copyWith(color: Palette.labelTertiaryLight),
-                  Theme.of(context)
-                      .textTheme
-                      .bodyLarge
+                  theme.textTheme.bodyLarge
                       ?.copyWith(color: Colors.transparent),
                   progress,
                 ),
@@ -104,10 +102,10 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                Strings.myTodos,
+                strings.myTodos,
                 style: TextStyle.lerp(
-                  Theme.of(context).textTheme.titleLarge,
-                  Theme.of(context).textTheme.titleMedium,
+                  theme.textTheme.titleLarge,
+                  theme.textTheme.titleMedium,
                   progress,
                 ),
               ),
