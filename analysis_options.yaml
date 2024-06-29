@@ -3,6 +3,8 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - "lib/src/core/localization/gen/**"
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
 
 linter:
   rules:

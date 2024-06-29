@@ -4,7 +4,7 @@ import 'package:yandex_todo_list/src/common/palette.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/core/utils/extensions/date_time_extension.dart';
 
-import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_entity.dart';
+import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
 part 'package:yandex_todo_list/src/features/todo_item_edit/widgets/description_text_field.dart';
 
 class TodoItemEditScreen extends StatefulWidget {
@@ -84,8 +84,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final strings =
-        AppLocalizations.of(context)!; //TODO: узнать насчёт оператора !
+    final strings = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Palette.backPrimaryLight,

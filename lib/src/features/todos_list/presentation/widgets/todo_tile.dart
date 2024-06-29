@@ -4,7 +4,7 @@ import '../../../../core/utils/extensions/date_time_extension.dart';
 import '../../../../core/utils/extensions/icons_extension.dart';
 import '../../../todo_item_edit/presentation/todo_item_edit_screen.dart';
 
-import '../../domain/entities/todo_entity.dart';
+import '../../domain/entities/todo_item/todo_entity.dart';
 
 class TodoTile extends StatefulWidget {
   const TodoTile({
@@ -84,6 +84,7 @@ class _TodoTileState extends State<TodoTile> {
         ),
         leading: Checkbox(
           value: _isChecked,
+
           /// Выбор цвета в зависимости от стейта чекбокса
           fillColor:
               WidgetStateProperty.resolveWith<Color>((Set<WidgetState> states) {

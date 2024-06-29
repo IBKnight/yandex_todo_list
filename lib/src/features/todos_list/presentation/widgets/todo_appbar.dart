@@ -23,30 +23,32 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
     final theme = Theme.of(context);
     final progress = shrinkOffset / maxExtent;
 
+    final appBarShadowDecoration = BoxDecoration(
+      color: Palette.backPrimaryLight,
+      boxShadow: [
+        BoxShadow(
+          offset: const Offset(0, 2),
+          blurRadius: 4,
+          color: Colors.black.withOpacity(0.14),
+        ),
+        BoxShadow(
+          offset: const Offset(0, 4),
+          blurRadius: 5,
+          color: Colors.black.withOpacity(0.12),
+        ),
+        BoxShadow(
+          offset: const Offset(0, 1),
+          blurRadius: 10,
+          color: Colors.black.withOpacity(0.2),
+        ),
+      ],
+    );
+
     return Container(
       decoration: const BoxDecoration(
         color: Palette.backPrimaryLight,
       ).lerpTo(
-        BoxDecoration(
-          color: Palette.backPrimaryLight,
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 2),
-              blurRadius: 4,
-              color: Colors.black.withOpacity(0.14),
-            ),
-            BoxShadow(
-              offset: const Offset(0, 4),
-              blurRadius: 5,
-              color: Colors.black.withOpacity(0.12),
-            ),
-            BoxShadow(
-              offset: const Offset(0, 1),
-              blurRadius: 10,
-              color: Colors.black.withOpacity(0.2),
-            ),
-          ],
-        ),
+        appBarShadowDecoration,
         progress,
       ),
       child: Stack(

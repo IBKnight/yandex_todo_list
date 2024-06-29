@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import '../domain/entities/todo_entity.dart';
+import '../domain/entities/todo_item/todo_entity.dart';
 
 /// Временное решение на [ChangeNotifier]
 /// и [ListenableBuilder] в остуствии нормальной бизнес логики
@@ -53,7 +53,7 @@ class TodoListModel extends ChangeNotifier {
         color: null,
         createdAt: randomMilliseconds,
         changedAt: randomMilliseconds,
-        lastUpdatedBy: random.nextInt(100) + 1,
+        lastUpdatedBy: (random.nextInt(100) + 1).toString(),
       );
     });
     notifyListeners();
