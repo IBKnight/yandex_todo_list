@@ -14,6 +14,6 @@ class TodoListModel with _$TodoListModel {
     @JsonKey(name: 'revision') required int revision,
   }) = _TodoListModel;
 
-  factory TodoListModel.fromJson(Map<String, dynamic> json) =>
+  factory TodoListModel.fromJson(Map<String, Object?> json) =>
       _$TodoListModelFromJson(json);
 }

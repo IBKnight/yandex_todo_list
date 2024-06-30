@@ -3,6 +3,7 @@ import 'palette.dart';
 
 abstract class AppTheme {
   static ThemeData get lightTheme => ThemeData(
+        scaffoldBackgroundColor: Palette.backPrimaryLight,
         dividerTheme: const DividerThemeData(
           thickness: 0.5,
           color: Palette.separatorLight,

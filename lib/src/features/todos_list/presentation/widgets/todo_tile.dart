@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
+import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
+
 import '../../../../common/palette.dart';
-import '../../../../core/utils/extensions/date_time_extension.dart';
 import '../../../../core/utils/extensions/icons_extension.dart';
 import '../../../todo_item_edit/presentation/todo_item_edit_screen.dart';
 
@@ -13,12 +17,14 @@ class TodoTile extends StatefulWidget {
     required this.markDone,
     required this.delete,
     required this.checkboxCallback,
+    required this.showCompleted,
   });
 
   final TodoEntity item;
   final VoidCallback markDone;
   final VoidCallback delete;
   final Function(bool isChecked) checkboxCallback;
+  final bool showCompleted;
 
   @override
   State<TodoTile> createState() => _TodoTileState();
@@ -45,12 +51,25 @@ class _TodoTileState extends State<TodoTile> {
     if (direction == DismissDirection.startToEnd && widget.item.done) {
       return false;
     }
+
+    // Чтобы при показе выполенных, свайп вправо не удалял тайл из дерева
+    if (direction == DismissDirection.startToEnd &&
+        widget.showCompleted &&
+        !widget.item.done) {
+      widget.markDone();
+
+      setState(() {
+        _isChecked = true;
+      });
+      return false;
+    }
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final locale = AppLocalizations.of(context)!;
     return Dismissible(
       key: Key(widget.item.id.toString()),
       onDismissed: _onDismiss,
@@ -74,8 +93,11 @@ class _TodoTileState extends State<TodoTile> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TodoItemEditScreen(
-                  todoEntity: widget.item,
+                builder: (_) => BlocProvider<TodoListBloc>.value(
+                  value: BlocProvider.of<TodoListBloc>(context),
+                  child: TodoItemEditScreen(
+                    todoEntity: widget.item,
+                  ),
                 ),
               ),
             );
@@ -101,8 +123,8 @@ class _TodoTileState extends State<TodoTile> {
               : theme.checkboxTheme.side,
           onChanged: (value) {
             _isChecked = value ?? false;
-
             widget.checkboxCallback(_isChecked);
+            setState(() {});
           },
         ),
         title: RichText(
@@ -143,8 +165,9 @@ class _TodoTileState extends State<TodoTile> {
         ),
         subtitle: widget.item.deadline != null
             ? Text(
-                DateTime.fromMillisecondsSinceEpoch(widget.item.deadline!)
-                    .formatDate(),
+                DateFormat.yMMMMd(locale.localeName).format(
+                  DateTime.fromMillisecondsSinceEpoch(widget.item.deadline!),
+                ),
                 style: theme.textTheme.bodySmall
                     ?.copyWith(color: Palette.labelTertiaryLight),
               )

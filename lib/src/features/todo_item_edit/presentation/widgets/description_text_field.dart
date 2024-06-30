@@ -22,12 +22,12 @@ class _DescriptionTextField extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             blurRadius: 2,
-            color: const Color(0xFF000000).withOpacity(0.06),
+            color: Palette.shadowColor.withOpacity(0.06),
           ),
           BoxShadow(
             blurRadius: 2,
             offset: const Offset(0, 2),
-            color: const Color(0xFF000000).withOpacity(0.12),
+            color: Palette.shadowColor.withOpacity(0.12),
           ),
         ],
         color: Palette.backElevatedLight,

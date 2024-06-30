@@ -23,6 +23,6 @@ class TodoModel with _$TodoModel {
     @JsonKey(name: 'last_updated_by') required String lastUpdatedBy,
   }) = _TodoModel;
 
-  factory TodoModel.fromJson(Map<String, dynamic> json) =>
+  factory TodoModel.fromJson(Map<String, Object?> json) =>
       _$TodoModelFromJson(json);
 }

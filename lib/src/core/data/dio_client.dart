@@ -15,7 +15,7 @@ base class DioClient extends RestClient {
     Map<String, String?>? queryParams,
   }) async {
     try {
-      final response = await dio.put(
+      final response = await dio.delete(
         '$path/$uuid',
         options: Options(headers: headers),
       );

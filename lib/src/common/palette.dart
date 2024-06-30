@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 abstract class Palette {
+  static const Color shadowColor = Color(0xFF000000);
   //light
   static const Color separatorLight = Color(0x33000000);
   static const Color overlayLight = Color(0x0F000000);

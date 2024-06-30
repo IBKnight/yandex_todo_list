@@ -14,6 +14,6 @@ class TodoOperationModel with _$TodoOperationModel {
     @JsonKey(name: 'revision') required int revision,
   }) = _TodoOperationModel;
 
-  factory TodoOperationModel.fromJson(Map<String, dynamic> json) =>
+  factory TodoOperationModel.fromJson(Map<String, Object?> json) =>
       _$TodoOperationModelFromJson(json);
 }
