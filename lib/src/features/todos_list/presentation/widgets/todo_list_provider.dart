@@ -12,7 +12,7 @@ class TodoListProvider extends StatelessWidget {
     final bloc = DependenciesScope.of(context)?.dependencies.todoListBloc;
 
     if (bloc == null) {
-      throw Exception();
+      throw Exception('BLoC does not exist');
     }
 
     return BlocProvider(

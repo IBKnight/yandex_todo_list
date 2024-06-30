@@ -1,4 +1,5 @@
 import 'package:yandex_todo_list/src/core/data/dio_client.dart';
+import 'package:yandex_todo_list/src/core/database/database.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/data/mappers/todo_operation_mapper.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/data/models/todo_operation_model.dart';
@@ -12,8 +13,12 @@ import 'package:yandex_todo_list/src/features/todos_list/domain/todo_list_reposi
 
 class TodoListRepository implements ITodoListRepository {
   final DioClient _dioClient;
+  final DbService _dbService;
 
-  TodoListRepository({required DioClient dioClient}) : _dioClient = dioClient;
+  TodoListRepository(
+    this._dbService, {
+    required DioClient dioClient,
+  }) : _dioClient = dioClient;
 
   final endpoint = '/list';
 
@@ -109,8 +114,11 @@ class TodoListRepository implements ITodoListRepository {
   @override
   Future<TodoListEntity> getTodoList() async {
     try {
-      final model =
-          TodoListModel.fromJson(await _dioClient.getList(endpoint) ?? {});
+      final jsonResponse = await _dioClient.getList(endpoint) ?? {};
+
+      final model = TodoListModel.fromJson(jsonResponse);
+
+      await _dbService.updateDatabase(jsonResponse);
 
       return TodoListMapper.toEntity(model);
     } catch (e, stackTrace) {

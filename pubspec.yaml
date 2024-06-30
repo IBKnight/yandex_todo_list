@@ -24,6 +24,10 @@ dependencies:
   # Networking
   dio: ^5.4.3+1
 
+  # Database
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+
   # BLoC
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6

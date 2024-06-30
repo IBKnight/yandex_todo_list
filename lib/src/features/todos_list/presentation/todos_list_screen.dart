@@ -145,7 +145,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
                   ),
                 ],
               ),
-            TodoListError _ => SnackBar(content: Text(state.message)),
+            TodoListError _ => Center(child: Text(state.message)),
           };
         },
       ),

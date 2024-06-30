@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_todo_list/src/app.dart';
 import 'package:yandex_todo_list/src/core/data/dio_client.dart';
+import 'package:yandex_todo_list/src/core/database/database.dart';
 import 'package:yandex_todo_list/src/core/utils/app_bloc_observer.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/initialization/dependencies.dart';
@@ -36,9 +37,12 @@ final class AppRunner {
           },
         ),
       );
+
+      final dbService = DbService();
+
       final dioClient = DioClient(dio: dio);
 
-      final todoListRepo = TodoListRepository(dioClient: dioClient);
+      final todoListRepo = TodoListRepository(dbService, dioClient: dioClient);
 
       final TodoListBloc todoListBloc = TodoListBloc(todoListRepo);
 

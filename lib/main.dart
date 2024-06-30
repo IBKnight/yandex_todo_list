@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:yandex_todo_list/src/features/initialization/app_runner.dart';
+
 import 'src/core/utils/logger.dart';
 
 void main() {
