@@ -18,7 +18,7 @@ jobs:
           channel: "stable"
       - run: flutter pub get
       - run: flutter clean
-      - run: flutter build apk
+      - run: flutter build apk --dart-define=BASE_URL=${{secrets.BASE_URL}} --dart-define=APP_TOKEN=${{secrets.APP_TOKEN}} --release
 
       - name: Push to Releases
         uses: ncipollo/release-action@v1
