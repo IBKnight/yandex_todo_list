@@ -3,7 +3,6 @@ description: "A new Flutter project."
 
 publish_to: "none"
 
-
 version: 1.0.0+1
 
 environment:
@@ -13,23 +12,40 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   cupertino_icons: ^1.0.6
-
 
   uuid: ^4.4.0
 
+  # Localization
+  intl: any
+  flutter_localizations:
+    sdk: flutter
 
+  # Networking
+  dio: ^5.4.3+1
+
+  # Database
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+
+  # BLoC
   bloc: ^8.1.4
   flutter_bloc: ^8.1.6
   bloc_concurrency: ^0.2.2
+  equatable: ^2.0.5
 
-
+  # Streams
   stream_transform: ^2.1.0
   rxdart: ^0.27.7
 
-
+  # Logger
   logging: ^1.2.0
+
+  # Codegen
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+
+  meta: ^1.12.0
 
 dev_dependencies:
   flutter_test:
@@ -37,29 +53,23 @@ dev_dependencies:
 
   flutter_launcher_icons: ^0.13.1
 
-
   flutter_lints: ^3.0.0
 
-flutter:
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
 
+flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/images/
 
-
-
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: iconFonts
+      fonts:
+        - asset: assets/icons/icons.ttf
 
 flutter_launcher_icons:
   image_path_android: "assets/images/icon1024.png"

@@ -44,3 +44,12 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Localization
+gen/
+
+# generated
+*.freezed.dart
+*.g.dart
+# debug
+launch.json
