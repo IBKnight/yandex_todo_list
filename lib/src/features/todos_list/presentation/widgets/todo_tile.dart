@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:yandex_todo_list/src/common/icons/basic_importance_icon.dart';
-import 'package:yandex_todo_list/src/common/icons/important_importance_icon.dart';
-import 'package:yandex_todo_list/src/common/palette.dart';
-import 'package:yandex_todo_list/src/core/utils/extensions/date_time_extension.dart';
-import 'package:yandex_todo_list/src/features/todo_item_edit/presentation/todo_item_edit_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
+import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 
-import 'package:yandex_todo_list/src/features/todos_list/domain/todo_entity.dart';
+import '../../../../common/palette.dart';
+import '../../../../core/utils/extensions/icons_extension.dart';
+import '../../../todo_item_edit/presentation/todo_item_edit_screen.dart';
+
+import '../../domain/entities/todo_item/todo_entity.dart';
 
 class TodoTile extends StatefulWidget {
   const TodoTile({
@@ -14,19 +17,21 @@ class TodoTile extends StatefulWidget {
     required this.markDone,
     required this.delete,
     required this.checkboxCallback,
+    required this.showCompleted,
   });
 
   final TodoEntity item;
   final VoidCallback markDone;
   final VoidCallback delete;
   final Function(bool isChecked) checkboxCallback;
+  final bool showCompleted;
 
   @override
   State<TodoTile> createState() => _TodoTileState();
 }
 
 class _TodoTileState extends State<TodoTile> {
-  late bool _isChecked;
+  bool _isChecked = false;
 
   @override
   void initState() {
@@ -34,17 +39,40 @@ class _TodoTileState extends State<TodoTile> {
     super.initState();
   }
 
+  void _onDismiss(direction) {
+    if (direction == DismissDirection.startToEnd) {
+      widget.markDone();
+    } else if (direction == DismissDirection.endToStart) {
+      widget.delete();
+    }
+  }
+
+  Future<bool> _confirmDissmis(direction) async {
+    if (direction == DismissDirection.startToEnd && widget.item.done) {
+      return false;
+    }
+
+    // Чтобы при показе выполенных, свайп вправо не удалял тайл из дерева
+    if (direction == DismissDirection.startToEnd &&
+        widget.showCompleted &&
+        !widget.item.done) {
+      widget.markDone();
+
+      setState(() {
+        _isChecked = true;
+      });
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final locale = AppLocalizations.of(context)!;
     return Dismissible(
       key: Key(widget.item.id.toString()),
-      onDismissed: (direction) {
-        if (direction == DismissDirection.startToEnd) {
-          widget.markDone();
-        } else if (direction == DismissDirection.endToStart) {
-          widget.delete();
-        }
-      },
+      onDismissed: _onDismiss,
       background: Container(
         color: Palette.greenLight,
         alignment: Alignment.centerLeft,
@@ -57,12 +85,7 @@ class _TodoTileState extends State<TodoTile> {
         padding: const EdgeInsetsDirectional.only(end: 20),
         child: const Icon(Icons.delete, color: Colors.white),
       ),
-      confirmDismiss: (direction) async {
-        if (direction == DismissDirection.startToEnd && widget.item.done) {
-          return false;
-        }
-        return true;
-      },
+      confirmDismiss: _confirmDissmis,
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         trailing: IconButton(
@@ -70,8 +93,11 @@ class _TodoTileState extends State<TodoTile> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TodoItemEditScreen(
-                  todoEntity: widget.item,
+                builder: (_) => BlocProvider<TodoListBloc>.value(
+                  value: BlocProvider.of<TodoListBloc>(context),
+                  child: TodoItemEditScreen(
+                    todoEntity: widget.item,
+                  ),
                 ),
               ),
             );
@@ -93,15 +119,12 @@ class _TodoTileState extends State<TodoTile> {
           }),
           activeColor: Palette.greenLight,
           side: widget.item.importance == TodoImportance.important
-              ? Theme.of(context)
-                  .checkboxTheme
-                  .side
-                  ?.copyWith(color: Palette.redLight)
-              : Theme.of(context).checkboxTheme.side,
+              ? theme.checkboxTheme.side?.copyWith(color: Palette.redLight)
+              : theme.checkboxTheme.side,
           onChanged: (value) {
             _isChecked = value ?? false;
-
             widget.checkboxCallback(_isChecked);
+            setState(() {});
           },
         ),
         title: RichText(
@@ -109,29 +132,29 @@ class _TodoTileState extends State<TodoTile> {
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  decoration: _isChecked
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                  color: _isChecked
-                      ? Palette.labelTertiaryLight
-                      : Palette.labelPrimaryLight,
-                ),
+            style: theme.textTheme.bodyLarge?.copyWith(
+              decoration:
+                  _isChecked ? TextDecoration.lineThrough : TextDecoration.none,
+              color: _isChecked
+                  ? Palette.labelTertiaryLight
+                  : Palette.labelPrimaryLight,
+            ),
             children: [
               if (widget.item.importance == TodoImportance.low)
                 WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
-                  child: CustomPaint(
-                    size: const Size(11 + 3, 14),
-                    painter: BasicImportanceIcon(),
+                  child: Icon(
+                    CustomIcons.arrowDown,
+                    size: 16,
                   ),
                 ),
               if (widget.item.importance == TodoImportance.important)
                 WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
-                  child: CustomPaint(
-                    size: const Size(10 + 3, 16),
-                    painter: ImportantImportanceIcon(),
+                  child: Icon(
+                    CustomIcons.exclamationPoint,
+                    size: 16,
+                    color: Palette.redLight,
                   ),
                 ),
               TextSpan(
@@ -142,11 +165,10 @@ class _TodoTileState extends State<TodoTile> {
         ),
         subtitle: widget.item.deadline != null
             ? Text(
-                DateTime.fromMillisecondsSinceEpoch(widget.item.deadline!)
-                    .formatDate(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                DateFormat.yMMMMd(locale.localeName).format(
+                  DateTime.fromMillisecondsSinceEpoch(widget.item.deadline!),
+                ),
+                style: theme.textTheme.bodySmall
                     ?.copyWith(color: Palette.labelTertiaryLight),
               )
             : null,

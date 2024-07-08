@@ -1,14 +1,13 @@
 import 'dart:async';
+import 'package:yandex_todo_list/src/features/initialization/app_runner.dart';
 
-import 'package:flutter/material.dart';
-import 'package:yandex_todo_list/src/app.dart';
-import 'package:yandex_todo_list/src/core/logger.dart';
+import 'src/core/utils/logger.dart';
 
 void main() {
   logger.runLogging(
     () => runZonedGuarded(
-      () {
-        runApp(const App());
+      () async {
+        const AppRunner().initializeAndRun();
       },
       logger.logZoneError,
     ),

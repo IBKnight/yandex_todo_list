@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yandex_todo_list/src/common/palette.dart';
-import 'package:yandex_todo_list/src/common/strings.dart';
+import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
+import '../../../../common/palette.dart';
 
 class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
   final int completedCount;
@@ -19,32 +19,36 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
+    final strings = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final progress = shrinkOffset / maxExtent;
+
+    final appBarShadowDecoration = BoxDecoration(
+      color: Palette.backPrimaryLight,
+      boxShadow: [
+        BoxShadow(
+          offset: const Offset(0, 2),
+          blurRadius: 4,
+          color: Colors.black.withOpacity(0.14),
+        ),
+        BoxShadow(
+          offset: const Offset(0, 4),
+          blurRadius: 5,
+          color: Colors.black.withOpacity(0.12),
+        ),
+        BoxShadow(
+          offset: const Offset(0, 1),
+          blurRadius: 10,
+          color: Colors.black.withOpacity(0.2),
+        ),
+      ],
+    );
 
     return Container(
       decoration: const BoxDecoration(
         color: Palette.backPrimaryLight,
       ).lerpTo(
-        BoxDecoration(
-          color: Palette.backPrimaryLight,
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 2),
-              blurRadius: 4,
-              color: Colors.black.withOpacity(0.14),
-            ),
-            BoxShadow(
-              offset: const Offset(0, 4),
-              blurRadius: 5,
-              color: Colors.black.withOpacity(0.12),
-            ),
-            BoxShadow(
-              offset: const Offset(0, 1),
-              blurRadius: 10,
-              color: Colors.black.withOpacity(0.2),
-            ),
-          ],
-        ),
+        appBarShadowDecoration,
         progress,
       ),
       child: Stack(
@@ -54,15 +58,11 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                '${Strings.completed} $completedCount',
+                '${strings.completed} $completedCount',
                 style: TextStyle.lerp(
-                  Theme.of(context)
-                      .textTheme
-                      .bodyLarge
+                  theme.textTheme.bodyLarge
                       ?.copyWith(color: Palette.labelTertiaryLight),
-                  Theme.of(context)
-                      .textTheme
-                      .bodyLarge
+                  theme.textTheme.bodyLarge
                       ?.copyWith(color: Colors.transparent),
                   progress,
                 ),
@@ -104,10 +104,10 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: Text(
-                Strings.myTodos,
+                strings.myTodos,
                 style: TextStyle.lerp(
-                  Theme.of(context).textTheme.titleLarge,
-                  Theme.of(context).textTheme.titleMedium,
+                  theme.textTheme.titleLarge,
+                  theme.textTheme.titleMedium,
                   progress,
                 ),
               ),
