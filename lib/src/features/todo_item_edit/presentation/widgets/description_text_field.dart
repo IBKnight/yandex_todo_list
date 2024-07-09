@@ -38,7 +38,7 @@ class _DescriptionTextField extends StatelessWidget {
         style: Theme.of(context).textTheme.bodyLarge,
         decoration: InputDecoration(
           border: InputBorder.none,
-          hintText: AppLocalizations.of(context)!.whatNeedToDo,
+          hintText: AppLocalizations.of(context).whatNeedToDo,
           contentPadding: const EdgeInsetsDirectional.all(16),
         ),
         keyboardType: TextInputType.multiline,

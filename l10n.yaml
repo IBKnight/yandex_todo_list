@@ -4,3 +4,4 @@ output-localization-file: app_localizations.dart
 output-class: AppLocalizations
 output-dir: lib/src/core/localization/gen
 synthetic-package: false
+nullable-getter: false

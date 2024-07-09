@@ -9,11 +9,7 @@ class TodoListProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = DependenciesScope.of(context)?.dependencies.todoListBloc;
-
-    if (bloc == null) {
-      throw Exception('BLoC does not exist');
-    }
+    final bloc = DependenciesScope.of(context).dependencies.todoListBloc;
 
     return BlocProvider(
       create: (context) => bloc..add(TodoListLoad()),

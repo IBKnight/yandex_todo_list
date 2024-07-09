@@ -1,4 +1,5 @@
 import 'package:yandex_todo_list/src/core/data/dio_client.dart';
+import 'package:yandex_todo_list/src/core/data/rest_client.dart';
 import 'package:yandex_todo_list/src/core/database/database.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/data/mappers/todo_operation_mapper.dart';
@@ -12,13 +13,14 @@ import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_li
 import 'package:yandex_todo_list/src/features/todos_list/domain/todo_list_repository.dart';
 
 class TodoListRepository implements ITodoListRepository {
-  final DioClient _dioClient;
+  final RestClient _restClient;
   final DbService _dbService;
 
-  TodoListRepository(
-    this._dbService, {
-    required DioClient dioClient,
-  }) : _dioClient = dioClient;
+  TodoListRepository({
+    required RestClient restClient,
+    required DbService dbService,
+  })  : _restClient = restClient,
+        _dbService = dbService;
 
   final endpoint = '/list';
 
@@ -30,7 +32,7 @@ class TodoListRepository implements ITodoListRepository {
     try {
       final todoMap = TodoMapper.toModel(todo).toJson();
 
-      final result = await _dioClient.addTodo(
+      final result = await _restClient.addTodo(
         endpoint,
         body: {'element': todoMap},
         headers: {
@@ -57,7 +59,7 @@ class TodoListRepository implements ITodoListRepository {
     try {
       final todoMap = TodoMapper.toModel(todo).toJson();
 
-      final result = await _dioClient.changeTodo(
+      final result = await _restClient.changeTodo(
         endpoint,
         todo.id,
         body: {'element': todoMap},
@@ -79,7 +81,7 @@ class TodoListRepository implements ITodoListRepository {
   @override
   Future<TodoOperationEntity> deleteTodo(String id, int revision) async {
     try {
-      final result = await _dioClient.deleteTodo(
+      final result = await _restClient.deleteTodo(
         endpoint,
         id,
         headers: {
@@ -101,7 +103,7 @@ class TodoListRepository implements ITodoListRepository {
   Future<TodoOperationEntity> getTodo(String id) async {
     try {
       final model = TodoOperationModel.fromJson(
-        await _dioClient.getTodo(endpoint, id) ?? {},
+        await _restClient.getTodo(endpoint, id) ?? {},
       );
 
       return TodoOperationMapper.toEntity(model);
@@ -114,7 +116,7 @@ class TodoListRepository implements ITodoListRepository {
   @override
   Future<TodoListEntity> getTodoList() async {
     try {
-      final jsonResponse = await _dioClient.getList(endpoint) ?? {};
+      final jsonResponse = await _restClient.getList(endpoint) ?? {};
 
       final model = TodoListModel.fromJson(jsonResponse);
 
@@ -135,7 +137,7 @@ class TodoListRepository implements ITodoListRepository {
     try {
       final todoMap = TodoListMapper.toModel(todoList).toJson();
 
-      final result = await _dioClient.addTodo(
+      final result = await _restClient.addTodo(
         endpoint,
         body: {'list': todoMap['list']},
         headers: {

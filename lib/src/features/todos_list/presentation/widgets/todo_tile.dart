@@ -69,7 +69,7 @@ class _TodoTileState extends State<TodoTile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final locale = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context);
     return Dismissible(
       key: Key(widget.item.id.toString()),
       onDismissed: _onDismiss,

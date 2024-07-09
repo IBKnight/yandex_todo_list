@@ -42,7 +42,10 @@ final class AppRunner {
 
       final dioClient = DioClient(dio: dio);
 
-      final todoListRepo = TodoListRepository(dbService, dioClient: dioClient);
+      final todoListRepo = TodoListRepository(
+        dbService: dbService,
+        restClient: dioClient,
+      );
 
       final TodoListBloc todoListBloc = TodoListBloc(todoListRepo);
 

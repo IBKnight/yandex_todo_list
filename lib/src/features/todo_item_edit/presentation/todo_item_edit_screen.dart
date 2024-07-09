@@ -148,7 +148,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final strings = AppLocalizations.of(context)!;
+    final strings = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Palette.backPrimaryLight,

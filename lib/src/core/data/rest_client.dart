@@ -11,6 +11,27 @@ abstract class RestClient {
     Map<String, String?>? queryParams,
   });
 
+  /// Request body
+  /// ```json
+  /// {
+  ///    "element": {
+  ///         "color": "<hex color>",
+  ///         "importance": <"low"|"basic"|"important">,
+  ///         "done": <bool>,
+  ///         "created_at": <timestamp>,
+  ///         "id": "<uuid>",
+  ///         "text": "some text",
+  ///         "changed_at": <timestamp>,
+  ///         "deadline": <timestamp>,
+  ///         "last_updated_by": "123"
+  ///     }
+  /// }
+  /// ```
+  ///
+  /// Header
+  /// ```
+  /// "X-Last-Known-Revision": <current revision>
+  /// ```
   Future<Map<String, Object?>?> addTodo(
     String path, {
     required Map<String, Object?> body,
@@ -18,6 +39,27 @@ abstract class RestClient {
     Map<String, String?>? queryParams,
   });
 
+  /// Request body
+  /// ```json
+  /// {
+  ///    "element": {
+  ///         "color": "<hex color>",
+  ///         "importance": <"low"|"basic"|"important">,
+  ///         "done": <bool>,
+  ///         "created_at": <timestamp>,
+  ///         "id": "<uuid>",
+  ///         "text": "some text",
+  ///         "changed_at": <timestamp>,
+  ///         "deadline": <timestamp>,
+  ///         "last_updated_by": "123"
+  ///     }
+  /// }
+  /// ```
+  ///
+  /// Header
+  /// ```
+  /// "X-Last-Known-Revision": <current revision>
+  /// ```
   Future<Map<String, Object?>?> changeTodo(
     String path,
     String uuid, {
@@ -33,6 +75,30 @@ abstract class RestClient {
     Map<String, String?>? queryParams,
   });
 
+  /// Request body
+  /// ```json
+  /// {
+  /// "list": [
+  ///     {
+  ///         "color": "<hex color>",
+  ///         "importance": <"low"|"basic"|"important">,
+  ///         "done": <bool>,
+  ///         "created_at": <timestamp>,
+  ///         "id": "<uuid>",
+  ///         "text": "some text",
+  ///         "changed_at": <timestamp>,
+  ///         "deadline": <timestamp>,
+  ///         "last_updated_by": "123"
+  ///     },
+  ///     ...
+  /// ]
+  /// }
+  /// ```
+  ///
+  /// header
+  /// ```
+  /// "X-Last-Known-Revision": <current revision>
+  /// ```
   Future<Map<String, Object?>?> updateList(
     String path, {
     required Map<String, Object?> body,

@@ -11,8 +11,8 @@ class DependenciesScope extends InheritedWidget {
 
   final Dependencies dependencies;
 
-  static DependenciesScope? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DependenciesScope>();
+  static DependenciesScope of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<DependenciesScope>()!;
   }
 
   @override
