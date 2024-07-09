@@ -18,5 +18,6 @@ linter:
     - use_named_constants
     - combinators_ordering
     - use_key_in_widget_constructors
+    - directives_ordering
 
     # - prefer_relative_imports

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
+import 'package:uuid/uuid.dart';
 import 'package:yandex_todo_list/src/common/palette.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
-import 'package:uuid/uuid.dart';
-
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
+
 part 'package:yandex_todo_list/src/features/todo_item_edit/presentation/widgets/description_text_field.dart';
 
 class TodoItemEditScreen extends StatefulWidget {

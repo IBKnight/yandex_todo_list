@@ -99,7 +99,7 @@ abstract class RestClient {
   /// ```
   /// "X-Last-Known-Revision": <current revision>
   /// ```
-  Future<Map<String, Object?>?> updateList(
+  Future<Map<String, Object?>?> updateTodoList(
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,

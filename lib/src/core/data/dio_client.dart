@@ -63,9 +63,8 @@ base class DioClient extends RestClient {
     }
   }
 
-
   @override
-  Future<Map<String, Object?>?> updateList(
+  Future<Map<String, Object?>?> updateTodoList(
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
@@ -85,7 +84,6 @@ base class DioClient extends RestClient {
       Error.throwWithStackTrace(e, stackTrace);
     }
   }
-
 
   @override
   Future<Map<String, Object?>?> addTodo(
@@ -108,7 +106,6 @@ base class DioClient extends RestClient {
       Error.throwWithStackTrace(e, stackTrace);
     }
   }
-
 
   @override
   Future<Map<String, Object?>?> changeTodo(

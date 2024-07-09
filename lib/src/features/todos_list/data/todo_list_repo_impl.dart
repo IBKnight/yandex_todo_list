@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/data/rest_client.dart';
-import 'package:yandex_todo_list/src/core/database/db_service.dart';
+import 'package:yandex_todo_list/src/core/database/ilocal_storage.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/data/mappers/todo_operation_mapper.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/data/models/todo_operation_model.dart';
@@ -15,11 +15,11 @@ import 'package:yandex_todo_list/src/features/todos_list/domain/todo_list_reposi
 
 class TodoListRepository implements ITodoListRepository {
   final RestClient _restClient;
-  final DbService _dbService;
+  final ILocalStorage _dbService;
 
   TodoListRepository({
     required RestClient restClient,
-    required DbService dbService,
+    required ILocalStorage dbService,
   })  : _restClient = restClient,
         _dbService = dbService;
 

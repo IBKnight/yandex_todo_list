@@ -1,5 +1,5 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:yandex_todo_list/src/core/database/ilocal_storage.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 
@@ -209,25 +209,41 @@ class DbService implements ILocalStorage {
     }
   }
 
-  Future<void> updateTodoList(Map<String, dynamic> data) async {
+  @override
+  Future<Map<String, Object?>> updateTodoList(
+    Map<String, Object?> newTodoList,
+  ) async {
     try {
-      if (!data.containsKey('list') || !data.containsKey('revision')) {
+      if (!newTodoList.containsKey('list') ||
+          !newTodoList.containsKey('revision')) {
         throw ArgumentError('Invalid data format');
       }
 
-      final List<dynamic> list = data['list'];
-      final int revision = data['revision'];
+      final todoList = newTodoList['list'];
 
-      // Clear the current todos
+      // Проверка типов
+      if (todoList is! List<Map<String, Object?>>) {
+        throw ArgumentError('Invalid type for list');
+      }
+      if (newTodoList['revision'] is! int) {
+        throw ArgumentError('Invalid type for revision');
+      }
+
+      final List<Map<String, Object?>> list =
+          List<Map<String, Object?>>.from(todoList);
+      final int revision = newTodoList['revision'] as int;
+
+      // Очистка текущих задач
       await clearTodos();
 
-      // Insert the new todos
+      // Вставка новых задач
       for (var item in list) {
         await addTodo(item);
       }
 
-      // Update the revision
       await setRevision(revision);
+
+      return newTodoList;
     } catch (e) {
       logger.error(e);
       rethrow;
