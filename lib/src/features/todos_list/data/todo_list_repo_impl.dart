@@ -1,6 +1,7 @@
-import 'package:yandex_todo_list/src/core/data/dio_client.dart';
+import 'package:dio/dio.dart';
+import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/data/rest_client.dart';
-import 'package:yandex_todo_list/src/core/database/database.dart';
+import 'package:yandex_todo_list/src/core/database/db_service.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/data/mappers/todo_operation_mapper.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/data/models/todo_operation_model.dart';
@@ -45,8 +46,18 @@ class TodoListRepository implements ITodoListRepository {
 
       return TodoOperationMapper.toEntity(model);
     } catch (e, stackTrace) {
-      logger.error('', error: e, stackTrace: stackTrace);
-      rethrow;
+      final statusCode = e is DioException ? e.response?.statusCode : 0;
+      final statusMessage = e is DioException ? e.response?.statusMessage : '';
+
+      logger.error(statusCode.toString());
+
+      Error.throwWithStackTrace(
+        NetworkException(
+          statusCode: statusCode ?? 500,
+          message: statusMessage ?? '',
+        ),
+        stackTrace,
+      );
     }
   }
 
@@ -116,16 +127,19 @@ class TodoListRepository implements ITodoListRepository {
   @override
   Future<TodoListEntity> getTodoList() async {
     try {
-      final jsonResponse = await _restClient.getList(endpoint) ?? {};
+      final jsonResponse = await _restClient.getTodoList(endpoint) ?? {};
 
       final model = TodoListModel.fromJson(jsonResponse);
 
-      await _dbService.updateDatabase(jsonResponse);
+      await _dbService.updateTodoList(jsonResponse);
 
       return TodoListMapper.toEntity(model);
-    } catch (e, stackTrace) {
-      logger.error('', error: e, stackTrace: stackTrace);
-      rethrow;
+    } catch (e) {
+      final json = await _dbService.getTodoList();
+
+      final model = TodoListModel.fromJson(json);
+
+      return TodoListMapper.toEntity(model);
     }
   }
 

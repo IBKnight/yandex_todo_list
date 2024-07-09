@@ -29,7 +29,7 @@ base class DioClient extends RestClient {
   }
 
   @override
-  Future<Map<String, Object?>?> getList(
+  Future<Map<String, Object?>?> getTodoList(
     String path, {
     Map<String, Object?>? headers,
     Map<String, String?>? queryParams,
