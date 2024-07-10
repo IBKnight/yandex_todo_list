@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import '../../../common/palette.dart';
@@ -151,15 +152,9 @@ class _TodosListScreenState extends State<TodosListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: BlocProvider.of<TodoListBloc>(
-                  context,
-                ),
-                child: const TodoItemEditScreen(),
-              ),
-            ),
+          context.push(
+            '/details',
+            extra: BlocProvider.of<TodoListBloc>(context),
           );
         },
         child: const Icon(Icons.add),

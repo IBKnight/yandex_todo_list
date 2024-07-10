@@ -8,6 +8,7 @@ import 'package:yandex_todo_list/src/core/database/db_service.dart';
 import 'package:yandex_todo_list/src/core/utils/app_bloc_observer.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/initialization/dependencies.dart';
+import 'package:yandex_todo_list/src/features/initialization/widgets/dependencies_scope.dart';
 import 'package:yandex_todo_list/src/features/initialization/widgets/failed_init_screen.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_list/data/todo_list_repo_impl.dart';
@@ -51,7 +52,12 @@ final class AppRunner {
 
       final dependencies = Dependencies(todoListBloc, todoListRepo);
 
-      runApp(App(dependencies: dependencies));
+      runApp(
+        DependenciesScope(
+          dependencies: dependencies,
+          child: const App(),
+        ),
+      );
     } catch (e, stackTrace) {
       logger.error('Initialization failed', error: e, stackTrace: stackTrace);
 

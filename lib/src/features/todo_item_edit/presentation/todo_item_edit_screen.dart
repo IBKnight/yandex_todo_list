@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -29,11 +31,9 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
 
   @override
   void initState() {
-    super.initState();
+    _getElement();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getElement();
-    });
+    super.initState();
   }
 
   @override
@@ -186,27 +186,26 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
       final entities = state.todoListEntity.list
           .where((entity) => entity.id == widget.id)
           .toList();
+
       if (entities.isNotEmpty) {
         todoEntity = entities.first;
+
+        _textEditingController.text = todoEntity?.text ?? '';
+        _selectedImportance = TodoImportance.values
+            .where(
+              (importance) => importance == todoEntity?.importance,
+            )
+            .first;
+        _dateTime = todoEntity?.deadline == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(
+                todoEntity?.deadline ?? DateTime.now().millisecondsSinceEpoch,
+              );
       } else {
         todoEntity = null;
       }
     } else {
       todoEntity = null;
-    }
-
-    if (todoEntity != null) {
-      _textEditingController.text = todoEntity?.text ?? '';
-      _selectedImportance = TodoImportance.values
-          .where(
-            (importance) => importance == todoEntity?.importance,
-          )
-          .first;
-      _dateTime = todoEntity?.deadline == null
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(
-              todoEntity?.deadline ?? DateTime.now().millisecondsSinceEpoch,
-            );
     }
 
     _hasDeadline = _dateTime != null;
