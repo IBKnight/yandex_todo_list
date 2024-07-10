@@ -22,6 +22,7 @@ class DbService implements ILocalStorage {
       path,
       version: 1,
       onCreate: _onCreate,
+      readOnly: false,
     );
   }
 
@@ -62,16 +63,18 @@ class DbService implements ILocalStorage {
       );
 
       if (result.isEmpty) {
-        return {}; // Возвращаем пустую карту, если задача не найдена
+        return {};
       }
 
       final Map<String, Object?> todoItem = result.first;
 
-      if (todoItem.containsKey('done')) {
-        todoItem['done'] = todoItem['done'] == 1 ? true : false;
+      final Map<String, Object?> map = Map<String, Object?>.from(todoItem);
+
+      if (map.containsKey('done')) {
+        map['done'] = map['done'] == 1 ? true : false;
       }
 
-      return todoItem;
+      return map;
     } catch (e) {
       logger.error(e);
       rethrow;
@@ -83,12 +86,18 @@ class DbService implements ILocalStorage {
     try {
       final db = await database;
 
-      todo['done'] = (todo['done'] == 'true') ? 1 : 0;
+      todo['done'] = (todo['done'] == true) ? 1 : 0;
+
       await db.insert(
         'todos',
         todo,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
+
+      int revision = await getRevision();
+      await setRevision(revision + 1);
+
+      todo['done'] = todo['done'] == 1;
 
       return todo;
     } catch (e) {
@@ -128,6 +137,7 @@ class DbService implements ILocalStorage {
     }
   }
 
+  @override
   Future<Map<String, Object?>> updateTodo(Map<String, Object?> todo) async {
     try {
       final db = await database;
@@ -138,6 +148,9 @@ class DbService implements ILocalStorage {
         whereArgs: [todo['id']],
       );
 
+      int revision = await getRevision();
+      await setRevision(revision + 1);
+
       return todo;
     } catch (e) {
       logger.error(e);
@@ -145,9 +158,19 @@ class DbService implements ILocalStorage {
     }
   }
 
-  Future<void> clearTodos() async {
-    final db = await database;
-    await db.delete('todos');
+  Future<void> _clearTodos() async {
+    try {
+      final db = await database;
+      final int count = await db.delete('todos');
+      if (count == 0) {
+        logger.warning('No rows were deleted from the todos table.');
+      } else {
+        logger.info('$count rows were deleted from the todos table.');
+      }
+    } catch (e) {
+      logger.error('Error while clearing todos table: $e');
+      rethrow;
+    }
   }
 
   @override
@@ -167,13 +190,17 @@ class DbService implements ILocalStorage {
         whereArgs: [id],
       );
 
+      int revision = await getRevision();
+      await setRevision(revision + 1);
+
       return todo;
-    } catch (e) {
-      logger.error(e);
+    } catch (e, stackTrace) {
+      logger.error(e, stackTrace: stackTrace);
       rethrow;
     }
   }
 
+  @override
   Future<int> getRevision() async {
     try {
       final db = await database;
@@ -221,8 +248,7 @@ class DbService implements ILocalStorage {
 
       final todoList = newTodoList['list'];
 
-      // Проверка типов
-      if (todoList is! List<Map<String, Object?>>) {
+      if (todoList is! List<dynamic>) {
         throw ArgumentError('Invalid type for list');
       }
       if (newTodoList['revision'] is! int) {
@@ -234,10 +260,10 @@ class DbService implements ILocalStorage {
       final int revision = newTodoList['revision'] as int;
 
       // Очистка текущих задач
-      await clearTodos();
+      await _clearTodos();
 
       // Вставка новых задач
-      for (var item in list) {
+      for (Map<String, Object?> item in list) {
         await addTodo(item);
       }
 

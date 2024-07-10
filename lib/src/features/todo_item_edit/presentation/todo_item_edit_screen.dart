@@ -127,6 +127,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             );
       }
     }
+    Navigator.of(context).pop();
   }
 
   void _deletePress() {

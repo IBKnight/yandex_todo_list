@@ -8,6 +8,7 @@ import 'package:yandex_todo_list/src/features/todo_item_edit/data/models/todo_op
 import 'package:yandex_todo_list/src/features/todo_item_edit/domain/entities/todo_operation_entity.dart';
 import 'package:yandex_todo_list/src/features/todos_list/data/mappers/todo_list_mapper.dart';
 import 'package:yandex_todo_list/src/features/todos_list/data/mappers/todo_mapper.dart';
+import 'package:yandex_todo_list/src/features/todos_list/data/models/todo_item/todo_model.dart';
 import 'package:yandex_todo_list/src/features/todos_list/data/models/todo_list/todo_list_model.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_list/todo_list_entity.dart';
@@ -30,6 +31,8 @@ class TodoListRepository implements ITodoListRepository {
     TodoEntity todo,
     int revision,
   ) async {
+    TodoOperationEntity? entity;
+
     try {
       final todoMap = TodoMapper.toModel(todo).toJson();
 
@@ -45,20 +48,29 @@ class TodoListRepository implements ITodoListRepository {
           TodoOperationModel.fromJson(result ?? {});
 
       return TodoOperationMapper.toEntity(model);
+    } on DioException catch (e) {
+      if (e.type != DioExceptionType.connectionError) {
+        int statusCode = e.response?.statusCode ?? 500;
+        throw NetworkException(statusCode: statusCode);
+      }
     } catch (e, stackTrace) {
-      final statusCode = e is DioException ? e.response?.statusCode : 0;
-      final statusMessage = e is DioException ? e.response?.statusMessage : '';
+      logger.error('', error: e, stackTrace: stackTrace);
+    } finally {
+      final todoMap = TodoMapper.toModel(todo).toJson();
 
-      logger.error(statusCode.toString());
-
-      Error.throwWithStackTrace(
-        NetworkException(
-          statusCode: statusCode ?? 500,
-          message: statusMessage ?? '',
+      final todoEntity = TodoMapper.toEntity(
+        TodoModel.fromJson(
+          await _dbService.addTodo(todoMap),
         ),
-        stackTrace,
+      );
+
+      entity = TodoOperationEntity(
+        element: todoEntity,
+        status: 'ok',
+        revision: await _dbService.getRevision(),
       );
     }
+    return entity;
   }
 
   @override
@@ -67,6 +79,8 @@ class TodoListRepository implements ITodoListRepository {
     TodoEntity todo,
     int revision,
   ) async {
+    TodoOperationEntity? entity;
+
     try {
       final todoMap = TodoMapper.toModel(todo).toJson();
 
@@ -76,21 +90,45 @@ class TodoListRepository implements ITodoListRepository {
         body: {'element': todoMap},
         headers: {
           'X-Last-Known-Revision': revision,
+          // 'X-Generate-Fails': 100,
         },
       );
 
       final TodoOperationModel model =
           TodoOperationModel.fromJson(result ?? {});
 
-      return TodoOperationMapper.toEntity(model);
+      entity = TodoOperationMapper.toEntity(model);
+
+      return entity;
+    } on DioException catch (e) {
+      if (e.type != DioExceptionType.connectionError) {
+        int statusCode = e.response?.statusCode ?? 500;
+        throw NetworkException(statusCode: statusCode);
+      }
     } catch (e, stackTrace) {
       logger.error('', error: e, stackTrace: stackTrace);
-      rethrow;
+    } finally {
+      final todoMap = TodoMapper.toModel(todo).toJson();
+
+      final todoEntity = TodoMapper.toEntity(
+        TodoModel.fromJson(
+          await _dbService.updateTodo(todoMap),
+        ),
+      );
+
+      entity = TodoOperationEntity(
+        element: todoEntity,
+        status: 'ok',
+        revision: await _dbService.getRevision(),
+      );
     }
+    return entity;
   }
 
   @override
   Future<TodoOperationEntity> deleteTodo(String id, int revision) async {
+    TodoOperationEntity? entity;
+
     try {
       final result = await _restClient.deleteTodo(
         endpoint,
@@ -104,10 +142,27 @@ class TodoListRepository implements ITodoListRepository {
           TodoOperationModel.fromJson(result ?? {});
 
       return TodoOperationMapper.toEntity(model);
+    } on DioException catch (e) {
+      if (e.type != DioExceptionType.connectionError) {
+        int statusCode = e.response?.statusCode ?? 500;
+        throw NetworkException(statusCode: statusCode);
+      }
     } catch (e, stackTrace) {
       logger.error('', error: e, stackTrace: stackTrace);
-      rethrow;
+    } finally {
+      final todoEntity = TodoMapper.toEntity(
+        TodoModel.fromJson(
+          await _dbService.deleteTodo(id),
+        ),
+      );
+
+      entity = TodoOperationEntity(
+        element: todoEntity,
+        status: 'ok',
+        revision: await _dbService.getRevision(),
+      );
     }
+    return entity;
   }
 
   @override
