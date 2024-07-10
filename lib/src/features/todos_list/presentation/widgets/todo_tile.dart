@@ -91,7 +91,7 @@ class _TodoTileState extends State<TodoTile> {
         trailing: IconButton(
           onPressed: () {
             context.push(
-              '/details/${widget.item.id}',
+              '/edit/${widget.item.id}',
               extra: BlocProvider.of<TodoListBloc>(context),
             );
           },

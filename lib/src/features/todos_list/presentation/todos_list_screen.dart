@@ -153,7 +153,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           context.push(
-            '/details',
+            '/add',
             extra: BlocProvider.of<TodoListBloc>(context),
           );
         },
