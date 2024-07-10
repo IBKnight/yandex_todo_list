@@ -28,6 +28,7 @@ abstract class AppRouter {
         ],
       ),
     ],
+    onException: (context, state, router) => const TodoListProvider(),
   );
 
   static GoRouter get goRouter => _goRouter;
