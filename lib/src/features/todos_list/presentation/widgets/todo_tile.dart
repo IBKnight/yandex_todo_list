@@ -96,7 +96,7 @@ class _TodoTileState extends State<TodoTile> {
                 builder: (_) => BlocProvider<TodoListBloc>.value(
                   value: BlocProvider.of<TodoListBloc>(context),
                   child: TodoItemEditScreen(
-                    todoEntity: widget.item,
+                    id: widget.item.id,
                   ),
                 ),
               ),

@@ -21,6 +21,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # Routing
+  go_router: ^14.2.0
+
   # Networking
   dio: ^5.4.3+1
 

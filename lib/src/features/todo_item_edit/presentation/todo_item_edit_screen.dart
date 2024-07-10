@@ -10,9 +10,9 @@ import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_it
 part 'package:yandex_todo_list/src/features/todo_item_edit/presentation/widgets/description_text_field.dart';
 
 class TodoItemEditScreen extends StatefulWidget {
-  const TodoItemEditScreen({super.key, this.todoEntity});
+  const TodoItemEditScreen({super.key, this.id});
 
-  final TodoEntity? todoEntity;
+  final String? id;
 
   @override
   State<TodoItemEditScreen> createState() => _TodoItemEditScreenState();
@@ -25,125 +25,21 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
   late final TextEditingController _textEditingController =
       TextEditingController();
 
+  TodoEntity? todoEntity;
+
   @override
   void initState() {
-    final item = widget.todoEntity;
-    if (item != null) {
-      _textEditingController.text = item.text;
-      _selectedImportance = TodoImportance.values
-          .where(
-            (importance) => importance == item.importance,
-          )
-          .first;
-      _dateTime = item.deadline == null
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(
-              item.deadline ?? DateTime.now().millisecondsSinceEpoch,
-            );
-    }
-
-    _hasDeadline = _dateTime != null;
-
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getElement();
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     _textEditingController.dispose();
-  }
-
-  void _switchChange(value) async {
-    if (!_hasDeadline) {
-      final date = await showDatePicker(
-        context: context,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(2030),
-      );
-      setState(() {
-        _dateTime = date;
-        _hasDeadline = _dateTime != null;
-      });
-    } else {
-      setState(() {
-        _hasDeadline = false;
-        _dateTime = null;
-      });
-    }
-  }
-
-  void _popMenuSelect(TodoImportance item) {
-    setState(() {
-      _selectedImportance = item;
-    });
-  }
-
-  String fromImportance(TodoImportance item, AppLocalizations strings) {
-    switch (item) {
-      case TodoImportance.low:
-        return strings.low;
-      case TodoImportance.basic:
-        return strings.basic;
-      case TodoImportance.important:
-        return strings.important;
-    }
-  }
-
-  void _saveButtonPress(BuildContext context) {
-    final item = widget.todoEntity;
-    final state = BlocProvider.of<TodoListBloc>(context).state;
-    if (state is TodoListLoaded) {
-      if (item == null) {
-        context.read<TodoListBloc>().add(
-              TodoListAdd(
-                listEntity: state.todoListEntity,
-                todoEntity: TodoEntity(
-                  id: const Uuid().v4(),
-                  text: _textEditingController.text,
-                  importance: _selectedImportance,
-                  deadline: _dateTime?.millisecondsSinceEpoch,
-                  done: false,
-                  createdAt: DateTime.now().millisecondsSinceEpoch,
-                  changedAt: DateTime.now().millisecondsSinceEpoch,
-                  lastUpdatedBy: '1',
-                ),
-              ),
-            );
-      } else {
-        context.read<TodoListBloc>().add(
-              TodoListChange(
-                listEntity: state.todoListEntity,
-                todoEntity: TodoEntity(
-                  id: item.id,
-                  text: _textEditingController.text,
-                  importance: _selectedImportance,
-                  deadline: _dateTime?.millisecondsSinceEpoch,
-                  done: item.done,
-                  createdAt: item.createdAt,
-                  changedAt: DateTime.now().millisecondsSinceEpoch,
-                  lastUpdatedBy: item.lastUpdatedBy,
-                ),
-              ),
-            );
-      }
-    }
-    Navigator.of(context).pop();
-  }
-
-  void _deletePress() {
-    final item = widget.todoEntity;
-    final state = BlocProvider.of<TodoListBloc>(context).state;
-    if (state is TodoListLoaded) {
-      if (item != null) {
-        context.read<TodoListBloc>().add(
-              TodoListDelete(
-                listEntity: state.todoListEntity,
-                id: item.id,
-              ),
-            );
-      }
-    }
-    Navigator.pop(context);
   }
 
   @override
@@ -256,20 +152,20 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             const Divider(),
             ListTile(
               onTap: _deletePress,
-              enabled: widget.todoEntity != null,
+              enabled: todoEntity != null,
               minTileHeight: 48,
               minLeadingWidth: 0,
               titleAlignment: ListTileTitleAlignment.center,
               leading: Icon(
                 Icons.delete,
-                color: widget.todoEntity != null
+                color: todoEntity != null
                     ? Palette.redLight
                     : Palette.labelDisableLight,
               ),
               title: Text(
                 strings.delete,
                 style: theme.textTheme.bodyLarge?.copyWith(
-                  color: widget.todoEntity != null
+                  color: todoEntity != null
                       ? Palette.redLight
                       : Palette.labelDisableLight,
                 ),
@@ -279,5 +175,133 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
         ),
       ),
     );
+  }
+
+  void _getElement() {
+    // Получаем стейт загруженных элементов
+    final state = BlocProvider.of<TodoListBloc>(context).state;
+
+    if (state is TodoListLoaded) {
+      //Ищем по айди элемент в списке
+      final entities = state.todoListEntity.list
+          .where((entity) => entity.id == widget.id)
+          .toList();
+      if (entities.isNotEmpty) {
+        todoEntity = entities.first;
+      } else {
+        todoEntity = null;
+      }
+    } else {
+      todoEntity = null;
+    }
+
+    if (todoEntity != null) {
+      _textEditingController.text = todoEntity?.text ?? '';
+      _selectedImportance = TodoImportance.values
+          .where(
+            (importance) => importance == todoEntity?.importance,
+          )
+          .first;
+      _dateTime = todoEntity?.deadline == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(
+              todoEntity?.deadline ?? DateTime.now().millisecondsSinceEpoch,
+            );
+    }
+
+    _hasDeadline = _dateTime != null;
+  }
+
+  void _switchChange(value) async {
+    if (!_hasDeadline) {
+      final date = await showDatePicker(
+        context: context,
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2030),
+      );
+      setState(() {
+        _dateTime = date;
+        _hasDeadline = _dateTime != null;
+      });
+    } else {
+      setState(() {
+        _hasDeadline = false;
+        _dateTime = null;
+      });
+    }
+  }
+
+  void _popMenuSelect(TodoImportance item) {
+    setState(() {
+      _selectedImportance = item;
+    });
+  }
+
+  String fromImportance(TodoImportance item, AppLocalizations strings) {
+    switch (item) {
+      case TodoImportance.low:
+        return strings.low;
+      case TodoImportance.basic:
+        return strings.basic;
+      case TodoImportance.important:
+        return strings.important;
+    }
+  }
+
+  void _saveButtonPress(BuildContext context) {
+    final item = todoEntity;
+    final state = BlocProvider.of<TodoListBloc>(context).state;
+    if (state is TodoListLoaded) {
+      if (item == null) {
+        context.read<TodoListBloc>().add(
+              TodoListAdd(
+                listEntity: state.todoListEntity,
+                todoEntity: TodoEntity(
+                  id: const Uuid().v4(),
+                  text: _textEditingController.text,
+                  importance: _selectedImportance,
+                  deadline: _dateTime?.millisecondsSinceEpoch,
+                  done: false,
+                  createdAt: DateTime.now().millisecondsSinceEpoch,
+                  changedAt: DateTime.now().millisecondsSinceEpoch,
+                  lastUpdatedBy: '1',
+                ),
+              ),
+            );
+      } else {
+        context.read<TodoListBloc>().add(
+              TodoListChange(
+                listEntity: state.todoListEntity,
+                todoEntity: TodoEntity(
+                  id: item.id,
+                  text: _textEditingController.text,
+                  importance: _selectedImportance,
+                  deadline: _dateTime?.millisecondsSinceEpoch,
+                  done: item.done,
+                  createdAt: item.createdAt,
+                  changedAt: DateTime.now().millisecondsSinceEpoch,
+                  lastUpdatedBy: item.lastUpdatedBy,
+                ),
+              ),
+            );
+      }
+    }
+    Navigator.of(context).pop();
+  }
+
+  void _deletePress() {
+    final item = todoEntity;
+    final state = BlocProvider.of<TodoListBloc>(context).state;
+    if (state is TodoListLoaded) {
+      if (item != null) {
+        context.read<TodoListBloc>().add(
+              TodoListDelete(
+                listEntity: state.todoListEntity,
+                id: item.id,
+              ),
+            );
+      }
+    }
+    Navigator.pop(context);
   }
 }
