@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import '../../../common/palette.dart';
@@ -27,14 +28,11 @@ class _TodosListScreenState extends State<TodosListScreen> {
           if (state is TodoListError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(
-                  state.message,
-                  style: theme.textTheme.bodyLarge,
-                ),
+                content: SnackBarContent(status: state.status),
                 // не нашёл как сделать snackbar, который нужно самому закрывать
                 duration: const Duration(days: 365),
                 action: SnackBarAction(
-                  label: 'Обновить',
+                  label: locale.update,
                   onPressed: () {
                     context.read<TodoListBloc>().add(
                           TodoListLoad(),
@@ -170,5 +168,41 @@ class _TodosListScreenState extends State<TodosListScreen> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+}
+
+class SnackBarContent extends StatelessWidget {
+  const SnackBarContent({
+    super.key,
+    required this.status,
+  });
+
+  final NetworkExceptionStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final locale = AppLocalizations.of(context);
+
+    return Text(
+      _getErrorFromStatus(status, locale),
+      style: theme.textTheme.bodyLarge,
+    );
+  }
+
+  String _getErrorFromStatus(
+    NetworkExceptionStatus status,
+    AppLocalizations locale,
+  ) {
+    switch (status) {
+      case NetworkExceptionStatus.serverError:
+        return locale.serverError;
+      case NetworkExceptionStatus.notFound:
+        return locale.notFound;
+      case NetworkExceptionStatus.revisionError:
+        return locale.revisionError;
+      case NetworkExceptionStatus.unauthorized:
+        return locale.unauthorized;
+    }
   }
 }

@@ -1,7 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
+import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/domain/entities/todo_operation_entity.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_list/todo_list_entity.dart';
@@ -48,13 +51,17 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       );
 
       emit(TodoListLoaded(todoListEntity: updatedList));
-    } catch (e) {
+    } on NetworkException catch (e) {
       emit(
         TodoListError(
           message: e.toString(),
           todoListEntity: event.listEntity,
+          status: NetworkExceptionStatus.getStatusFromCode(e.statusCode),
         ),
       );
+    } catch (e) {
+      logger.error(e);
+      rethrow;
     }
   }
 
@@ -66,7 +73,7 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       emit(TodoListLoading());
       final entity = await repository.getTodoList();
       emit(TodoListLoaded(todoListEntity: entity));
-    } catch (e) {
+    } on NetworkException catch (e) {
       emit(
         TodoListError(
           message: e.toString(),
@@ -75,8 +82,12 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
             list: <TodoEntity>[],
             revision: 0,
           ),
+          status: NetworkExceptionStatus.getStatusFromCode(e.statusCode),
         ),
       );
+    } catch (e) {
+      logger.error(e);
+      rethrow;
     }
   }
 
@@ -110,13 +121,17 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       );
 
       emit(TodoListLoaded(todoListEntity: updatedList));
-    } catch (e) {
+    } on NetworkException catch (e) {
       emit(
         TodoListError(
           message: e.toString(),
           todoListEntity: event.listEntity,
+          status: NetworkExceptionStatus.getStatusFromCode(e.statusCode),
         ),
       );
+    } catch (e) {
+      logger.error(e);
+      rethrow;
     }
   }
 
@@ -145,13 +160,17 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       );
 
       emit(TodoListLoaded(todoListEntity: updatedList));
-    } catch (e) {
+    } on NetworkException catch (e) {
       emit(
         TodoListError(
           message: e.toString(),
           todoListEntity: event.listEntity,
+          status: NetworkExceptionStatus.getStatusFromCode(e.statusCode),
         ),
       );
+    } catch (e) {
+      logger.error(e);
+      rethrow;
     }
   }
 }

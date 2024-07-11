@@ -19,10 +19,12 @@ final class TodoListLoaded extends TodoListState {
 final class TodoListError extends TodoListState {
   final String message;
   final TodoListEntity todoListEntity;
+  final NetworkExceptionStatus status;
 
   TodoListError({
     required this.message,
     required this.todoListEntity,
+    required this.status,
   });
 
   @override
