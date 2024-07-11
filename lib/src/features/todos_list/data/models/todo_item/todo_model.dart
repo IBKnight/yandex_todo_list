@@ -18,6 +18,7 @@ class TodoModel with _$TodoModel {
     @JsonKey(name: 'deadline') int? deadline,
     @JsonKey(name: 'done') required bool done,
     @JsonKey(name: 'color') String? color,
+    @JsonKey(name: 'files') String? files,
     @JsonKey(name: 'created_at') required int createdAt,
     @JsonKey(name: 'changed_at') required int changedAt,
     @JsonKey(name: 'last_updated_by') required String lastUpdatedBy,

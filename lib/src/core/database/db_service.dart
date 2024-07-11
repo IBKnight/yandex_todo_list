@@ -35,6 +35,7 @@ class DbService implements ILocalStorage {
         deadline INTEGER,
         done INTEGER,
         color TEXT,
+        files TEXT,
         created_at INTEGER,
         changed_at INTEGER,
         last_updated_by TEXT
