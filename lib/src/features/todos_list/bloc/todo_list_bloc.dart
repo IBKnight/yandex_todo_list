@@ -47,9 +47,14 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         revision: newEntity.revision,
       );
 
-      emit(TodoListLoaded(updatedList));
+      emit(TodoListLoaded(todoListEntity: updatedList));
     } catch (e) {
-      emit(TodoListError(e.toString()));
+      emit(
+        TodoListError(
+          message: e.toString(),
+          todoListEntity: event.listEntity,
+        ),
+      );
     }
   }
 
@@ -60,9 +65,18 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
     try {
       emit(TodoListLoading());
       final entity = await repository.getTodoList();
-      emit(TodoListLoaded(entity));
+      emit(TodoListLoaded(todoListEntity: entity));
     } catch (e) {
-      emit(TodoListError(e.toString()));
+      emit(
+        TodoListError(
+          message: e.toString(),
+          todoListEntity: const TodoListEntity(
+            status: 'gg',
+            list: <TodoEntity>[],
+            revision: 0,
+          ),
+        ),
+      );
     }
   }
 
@@ -95,9 +109,14 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         revision: changedEntity.revision,
       );
 
-      emit(TodoListLoaded(updatedList));
+      emit(TodoListLoaded(todoListEntity: updatedList));
     } catch (e) {
-      emit(TodoListError(e.toString()));
+      emit(
+        TodoListError(
+          message: e.toString(),
+          todoListEntity: event.listEntity,
+        ),
+      );
     }
   }
 
@@ -125,9 +144,14 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         revision: deletedEntity.revision,
       );
 
-      emit(TodoListLoaded(updatedList));
+      emit(TodoListLoaded(todoListEntity: updatedList));
     } catch (e) {
-      emit(TodoListError(e.toString()));
+      emit(
+        TodoListError(
+          message: e.toString(),
+          todoListEntity: event.listEntity,
+        ),
+      );
     }
   }
 }

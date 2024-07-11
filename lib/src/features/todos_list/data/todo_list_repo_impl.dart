@@ -200,7 +200,6 @@ class TodoListRepository implements ITodoListRepository {
 
   @override
   Future<TodoListEntity> updateTodoList(
-    String id,
     TodoListEntity todoList,
   ) async {
     try {

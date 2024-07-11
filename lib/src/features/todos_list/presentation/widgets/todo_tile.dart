@@ -98,6 +98,7 @@ class _TodoTileState extends State<TodoTile> {
           icon: const Icon(Icons.info_outline),
         ),
         leading: Checkbox(
+          key: ValueKey('checkbox_${widget.item.id}'),
           value: _isChecked,
 
           /// Выбор цвета в зависимости от стейта чекбокса

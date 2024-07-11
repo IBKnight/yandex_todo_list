@@ -8,6 +8,7 @@ part 'todo_list_model.g.dart';
 
 @freezed
 class TodoListModel with _$TodoListModel {
+  @JsonSerializable(explicitToJson: true)
   const factory TodoListModel({
     @JsonKey(name: 'status') required String status,
     @JsonKey(name: 'list') required List<TodoModel> list,

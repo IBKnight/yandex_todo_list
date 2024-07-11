@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'rest_client.dart';
 
-base class DioClient extends RestClient {
+class DioClient extends RestClient {
   final Dio dio;
 
   DioClient({required this.dio});

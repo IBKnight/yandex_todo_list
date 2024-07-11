@@ -11,16 +11,20 @@ final class TodoListLoading extends TodoListState {
 final class TodoListLoaded extends TodoListState {
   final TodoListEntity todoListEntity;
 
-  TodoListLoaded(this.todoListEntity);
+  TodoListLoaded({required this.todoListEntity});
   @override
   List<Object?> get props => [todoListEntity];
 }
 
 final class TodoListError extends TodoListState {
   final String message;
+  final TodoListEntity todoListEntity;
 
-  TodoListError(this.message);
+  TodoListError({
+    required this.message,
+    required this.todoListEntity,
+  });
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, todoListEntity];
 }

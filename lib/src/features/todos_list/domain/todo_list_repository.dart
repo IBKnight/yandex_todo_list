@@ -22,7 +22,6 @@ abstract interface class ITodoListRepository {
   Future<TodoOperationEntity> deleteTodo(String id, int revision);
 
   Future<TodoListEntity> updateTodoList(
-    String id,
     TodoListEntity todoList,
   );
 }
