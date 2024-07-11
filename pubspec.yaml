@@ -50,6 +50,9 @@ dependencies:
 
   meta: ^1.12.0
 
+  # Connection Status
+  connectivity_plus: ^6.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
