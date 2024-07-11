@@ -13,4 +13,5 @@ abstract interface class ILocalStorage {
 
   Future<int> getRevision();
 
+  Future<void> setRevision(int revision);
 }

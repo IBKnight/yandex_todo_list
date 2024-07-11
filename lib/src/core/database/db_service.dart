@@ -221,6 +221,7 @@ class DbService implements ILocalStorage {
     }
   }
 
+  @override
   Future<void> setRevision(int revision) async {
     try {
       final db = await database;
