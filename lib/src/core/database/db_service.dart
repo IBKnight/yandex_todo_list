@@ -96,7 +96,10 @@ class DbService implements ILocalStorage {
       );
 
       int revision = await getRevision();
+
       await setRevision(revision + 1);
+
+
 
       todo['done'] = todo['done'] == 1;
 

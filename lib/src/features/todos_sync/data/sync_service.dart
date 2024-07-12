@@ -23,6 +23,9 @@ class SyncService {
           await restClient.updateTodoList(
                 '/list',
                 body: {'list': todosLocal['list']},
+                headers: {
+                  'X-Last-Known-Revision': remoteRevision,
+                },
               ) ??
               {},
         );

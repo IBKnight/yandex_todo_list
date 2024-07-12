@@ -1,4 +1,5 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,8 @@ import 'package:yandex_todo_list/src/features/initialization/widgets/dependencie
 import 'package:yandex_todo_list/src/features/initialization/widgets/failed_init_screen.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_list/data/todo_list_repo_impl.dart';
+import 'package:yandex_todo_list/src/features/todos_sync/bloc/network_status_bloc.dart';
+import 'package:yandex_todo_list/src/features/todos_sync/data/sync_service.dart';
 
 final class AppRunner {
   const AppRunner();
@@ -50,7 +53,23 @@ final class AppRunner {
 
       final TodoListBloc todoListBloc = TodoListBloc(todoListRepo);
 
-      final dependencies = Dependencies(todoListBloc, todoListRepo);
+      final syncService = SyncService(
+        restClient: dioClient,
+        localStorage: dbService,
+      );
+
+      final connectivity = Connectivity();
+
+      final NetworkStatusBloc networkStatusBloc = NetworkStatusBloc(
+        syncService: syncService,
+        connectivity: connectivity,
+      );
+
+      final dependencies = Dependencies(
+        todoListBloc: todoListBloc,
+        todoListRepo: todoListRepo,
+        networkStatusBloc: networkStatusBloc,
+      );
 
       runApp(
         DependenciesScope(

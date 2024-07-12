@@ -1,28 +1,50 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:meta/meta.dart';
 import 'package:yandex_todo_list/src/features/todos_sync/data/sync_service.dart';
-import 'package:yandex_todo_list/src/features/todos_sync/network_helper.dart';
 
 part 'network_status_event.dart';
 part 'network_status_state.dart';
 
 class NetworkStatusBloc extends Bloc<NetworkStatusEvent, NetworkStatusState> {
   final SyncService syncService;
-  NetworkStatusBloc({required this.syncService})
-      : super(NetworkStatusLoading()) {
+  final Connectivity connectivity;
+
+  // Без игнора аналайзер считает, что поле unused, хотя ниже оно используется
+  // ignore: unused_field
+  StreamSubscription? _networkSub;
+
+  NetworkStatusBloc({
+    required this.syncService,
+    required this.connectivity,
+  }) : super(NetworkStatusLoading()) {
     on<NetworkStatusEvent>(
       (event, emit) => switch (event) {
-        NetworkStatusObserve e => _observe(e, emit),
-        NetworkStatusNotify e => _notifyStatus(e, emit),
+        NetworkStatusChanged e => _notifyStatus(e, emit),
       },
     );
+
+    _networkSub = connectivity.onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
+      log(result.toString());
+      if (result.last == ConnectivityResult.none) {
+        add(NetworkStatusChanged());
+      } else {
+        add(NetworkStatusChanged(isConnected: true));
+      }
+    });
   }
-  void _observe(NetworkStatusObserve event, Emitter<NetworkStatusState> emit) {
-    NetworkHelper.observeNetwork();
+  @override
+  Future<void> close() async {
+    super.close();
+    _networkSub = null;
   }
 
   void _notifyStatus(
-    NetworkStatusNotify event,
+    NetworkStatusChanged event,
     Emitter<NetworkStatusState> emit,
   ) async {
     try {

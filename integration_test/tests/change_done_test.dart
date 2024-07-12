@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,6 +12,8 @@ import 'package:yandex_todo_list/src/features/initialization/widgets/dependencie
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_list/data/todo_list_repo_impl.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
+import 'package:yandex_todo_list/src/features/todos_sync/bloc/network_status_bloc.dart';
+import 'package:yandex_todo_list/src/features/todos_sync/data/sync_service.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -40,9 +43,23 @@ void main() {
         dbService: dbService,
         restClient: dioClient,
       );
+      final syncService = SyncService(
+        restClient: dioClient,
+        localStorage: dbService,
+      );
 
       final TodoListBloc todoListBloc = TodoListBloc(repository);
-      dependencies = Dependencies(todoListBloc, repository);
+      final Connectivity connectivity = Connectivity();
+      final NetworkStatusBloc networkStatusBloc = NetworkStatusBloc(
+        connectivity: connectivity,
+        syncService: syncService,
+      );
+
+      dependencies = Dependencies(
+        todoListBloc: todoListBloc,
+        todoListRepo: repository,
+        networkStatusBloc: networkStatusBloc,
+      );
 
       // Создаем тестовую задачу и добавляем ее через репозиторий
       final list = await repository.getTodoList();
