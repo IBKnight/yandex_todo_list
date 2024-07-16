@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import '../../../../common/palette.dart';
 
@@ -21,10 +22,11 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
   ) {
     final strings = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final brandColors = theme.extension<BrandColors>()!;
     final progress = shrinkOffset / maxExtent;
 
     final appBarShadowDecoration = BoxDecoration(
-      color: Palette.backPrimaryLight,
+      color: brandColors.backSecondary,
       boxShadow: [
         BoxShadow(
           offset: const Offset(0, 2),
@@ -45,8 +47,8 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
     );
 
     return Container(
-      decoration: const BoxDecoration(
-        color: Palette.backPrimaryLight,
+      decoration: BoxDecoration(
+        color: brandColors.backPrimary,
       ).lerpTo(
         appBarShadowDecoration,
         progress,
@@ -61,9 +63,10 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
                 '${strings.completed} $completedCount',
                 style: TextStyle.lerp(
                   theme.textTheme.bodyLarge
-                      ?.copyWith(color: Palette.labelTertiaryLight),
-                  theme.textTheme.bodyLarge
-                      ?.copyWith(color: Colors.transparent),
+                      ?.copyWith(color: brandColors.labelTertiary),
+                  theme.textTheme.bodyLarge?.copyWith(
+                    color: brandColors.labelTertiary?.withOpacity(0),
+                  ),
                   progress,
                 ),
               ),
@@ -79,6 +82,12 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
             child: Align(
               alignment: Alignment.bottomRight,
               child: Material(
+                borderOnForeground: false,
+                color: Color.lerp(
+                  brandColors.backPrimary,
+                  brandColors.backSecondary,
+                  progress,
+                ),
                 shape: const CircleBorder(),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20),
@@ -88,7 +97,7 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
                   child: Icon(
                     shownCompleted ? Icons.visibility : Icons.visibility_off,
                     size: 22.03,
-                    color: Palette.blueLight,
+                    color: brandColors.blue,
                   ),
                 ),
               ),

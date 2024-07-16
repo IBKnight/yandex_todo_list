@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
@@ -22,6 +23,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final brandColors = theme.extension<BrandColors>()!;
     return Scaffold(
       body: BlocConsumer<TodoListBloc, TodoListState>(
         listener: (context, state) {
@@ -45,7 +47,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
         },
         builder: (context, state) {
           if (state is TodoListLoading) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -77,7 +79,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
                   ),
                   sliver: DecoratedSliver(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: brandColors.backSecondary,
                       borderRadius: BorderRadius.circular(8),
                       boxShadow: [
                         BoxShadow(
@@ -117,7 +119,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
                               title: Text(
                                 locale.newTodos,
                                 style: theme.textTheme.bodyLarge?.copyWith(
-                                  color: Palette.labelTertiaryLight,
+                                  color: brandColors.labelTertiary,
                                 ),
                               ),
                               onTap: () => context.push('/add'),

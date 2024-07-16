@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:yandex_todo_list/src/common/palette.dart';
+import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
@@ -44,8 +45,8 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final brandColors = theme.extension<BrandColors>()!;
     return Scaffold(
-      backgroundColor: Palette.backPrimaryLight,
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
@@ -53,14 +54,13 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(
+          icon:  Icon(
             Icons.close,
             size: 22,
-            color: Palette.labelPrimaryLight,
+            color: brandColors.labelPrimary,
           ),
         ),
         scrolledUnderElevation: 5,
-        backgroundColor: Palette.backPrimaryLight,
         actions: [
           TextButton(
             onPressed: () {
@@ -68,8 +68,9 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             },
             child: Text(
               strings.save,
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: Palette.blueLight),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: brandColors.blue,
+              ),
             ),
           ),
         ],
@@ -106,8 +107,8 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
                       fromImportance(importance, strings),
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: importance == TodoImportance.important
-                            ? Palette.redLight
-                            : Palette.labelTertiaryLight,
+                            ? brandColors.red
+                            : brandColors.labelTertiary,
                       ),
                     ),
                   );
@@ -115,7 +116,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
                 child: Text(
                   fromImportance(_selectedImportance, strings),
                   style: theme.textTheme.bodySmall
-                      ?.copyWith(color: Palette.labelTertiaryLight),
+                      ?.copyWith(color: brandColors.labelTertiary),
                 ),
               ),
             ),
@@ -138,7 +139,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
                         _dateTime!,
                       ),
                       style: theme.textTheme.bodySmall
-                          ?.copyWith(color: Palette.blueLight),
+                          ?.copyWith(color: brandColors.blue),
                     )
                   : null,
               trailing: Switch(
@@ -157,15 +158,15 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
               leading: Icon(
                 Icons.delete,
                 color: todoEntity != null
-                    ? Palette.redLight
-                    : Palette.labelDisableLight,
+                    ? brandColors.red
+                    : brandColors.labelDisable,
               ),
               title: Text(
                 strings.delete,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: todoEntity != null
-                      ? Palette.redLight
-                      : Palette.labelDisableLight,
+                      ? brandColors.red
+                      : brandColors.labelDisable,
                 ),
               ),
             ),

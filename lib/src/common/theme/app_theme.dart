@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
-import 'palette.dart';
+import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
+import '../palette.dart';
 
 abstract class AppTheme {
   static ThemeData get lightTheme => ThemeData(
+        extensions: const [
+          BrandColors(
+            overlay: Palette.overlayLight,
+            labelPrimary: Palette.labelPrimaryLight,
+            separator: Palette.separatorLight,
+            labelSecondary: Palette.labelSecondaryLight,
+            labelTertiary: Palette.labelTertiaryLight,
+            labelDisable: Palette.labelDisableLight,
+            red: Palette.redLight,
+            green: Palette.greenLight,
+            blue: Palette.blueLight,
+            colorGray: Palette.colorGrayLight,
+            colorLightGray: Palette.colorLightGrayLight,
+            colorWhite: Palette.colorWhiteLight,
+            backPrimary: Palette.backPrimaryLight,
+            backSecondary: Palette.backSecondaryLight,
+            backElevated: Palette.backElevatedLight,
+          ),
+        ],
         scaffoldBackgroundColor: Palette.backPrimaryLight,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Palette.backPrimaryLight,
+        ),
         snackBarTheme: const SnackBarThemeData(
           actionBackgroundColor: Palette.colorWhiteLight,
           actionTextColor: Palette.labelPrimaryLight,
@@ -66,7 +89,56 @@ abstract class AppTheme {
         ),
       );
   static ThemeData get darkTheme => ThemeData(
+        colorScheme: const ColorScheme(
+          brightness: Brightness.dark,
+          primary: Palette.blueDark,
+          onPrimary: Palette.blueDark,
+          secondary: Palette.blueDark,
+          onSecondary: Palette.colorWhiteDark,
+          error: Colors.amber,
+          onError: Colors.amber,
+          surface: Palette.blueDark,
+          onSurface: Palette.labelPrimaryDark,
+        ),
+        extensions: const [
+          BrandColors(
+            overlay: Palette.overlayDark,
+            labelPrimary: Palette.labelPrimaryDark,
+            separator: Palette.separatorDark,
+            labelSecondary: Palette.labelSecondaryDark,
+            labelTertiary: Palette.labelTertiaryDark,
+            labelDisable: Palette.labelDisableDark,
+            red: Palette.redDark,
+            green: Palette.greenDark,
+            blue: Palette.blueDark,
+            colorGray: Palette.colorGrayDark,
+            colorLightGray: Palette.colorLightGrayDark,
+            colorWhite: Palette.colorWhiteDark,
+            backPrimary: Palette.backPrimaryDark,
+            backSecondary: Palette.backSecondaryDark,
+            backElevated: Palette.backElevatedDark,
+          ),
+        ],
+        datePickerTheme: const DatePickerThemeData(
+          backgroundColor: Palette.backSecondaryDark,
+          dayForegroundColor: WidgetStatePropertyAll(Palette.labelPrimaryDark),
+          yearForegroundColor: WidgetStatePropertyAll(Palette.labelPrimaryDark),
+          headerForegroundColor: Palette.labelPrimaryDark,
+          weekdayStyle: TextStyle(color: Palette.labelTertiaryDark),
+        ),
+        scaffoldBackgroundColor: Palette.backPrimaryDark,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Palette.backPrimaryDark,
+        ),
         useMaterial3: false,
+        checkboxTheme: const CheckboxThemeData(
+          fillColor: WidgetStatePropertyAll(Palette.backSecondaryDark),
+          side: BorderSide(color: Palette.separatorDark, width: 2),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+          outlineBorder: BorderSide.none,
+        ),
         textTheme: const TextTheme(
           //? Large title
           titleLarge: TextStyle(

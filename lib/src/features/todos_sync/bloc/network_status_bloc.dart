@@ -39,6 +39,7 @@ class NetworkStatusBloc extends Bloc<NetworkStatusEvent, NetworkStatusState> {
   }
   @override
   Future<void> close() async {
+    _networkSub?.cancel();
     super.close();
     _networkSub = null;
   }
