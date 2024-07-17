@@ -20,11 +20,22 @@ jobs:
       - run: flutter gen-l10n
       - run: dart run build_runner build --delete-conflicting-outputs
 
-      - run: flutter build apk --dart-define=BASE_URL=${{secrets.BASE_URL}} --dart-define=APP_TOKEN=${{secrets.APP_TOKEN}} --release
+      - name: Check Formatting
+        run: find lib test -name "*.dart" ! -name "*.*.dart" -print0 | xargs -0 dart format --set-exit-if-changed --line-length 100 -o show
+
+      - name: Analyze
+        run: flutter analyze .
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Build APK
+        run: flutter build apk --dart-define=BASE_URL=${{secrets.BASE_URL}} --dart-define=APP_TOKEN=${{secrets.APP_TOKEN}} --flavor production
+
 
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/flutter-apk/app-release.apk"
+          artifacts: "build/app/outputs/flutter-apk/app-production-release.apk"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
