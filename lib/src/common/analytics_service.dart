@@ -13,7 +13,7 @@ class AnalyticsService {
     try {
       _analytics.logEvent(
         name: 'add_task',
-        parameters: {},
+        parameters: {'todo': todo.toString()},
       );
     } catch (e) {
       logger.error(e.toString());
@@ -24,7 +24,7 @@ class AnalyticsService {
     try {
       _analytics.logEvent(
         name: 'delete_task',
-        parameters: {},
+        parameters: {'todo': todo.toString()},
       );
     } catch (e) {
       logger.error(e.toString());
@@ -35,7 +35,7 @@ class AnalyticsService {
     try {
       _analytics.logEvent(
         name: 'update_task',
-        parameters: {},
+        parameters: {'todo': todo.toString()},
       );
     } catch (e) {
       logger.error(e.toString());

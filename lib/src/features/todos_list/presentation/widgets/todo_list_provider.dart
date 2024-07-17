@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_todo_list/src/features/initialization/widgets/dependencies_scope.dart';
-import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
+import 'package:yandex_todo_list/src/features/todos_list/blocs/todo_list_bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_sync/presentation/network_status_screen.dart';
 
 class TodoListProvider extends StatelessWidget {
@@ -12,6 +12,8 @@ class TodoListProvider extends StatelessWidget {
     final bloc = DependenciesScope.of(context).dependencies.todoListBloc;
     final networkBloc =
         DependenciesScope.of(context).dependencies.networkStatusBloc;
+    final remoteConfigBloc =
+        DependenciesScope.of(context).dependencies.colorRemoteConfigBloc;
 
     return MultiBlocProvider(
       providers: [
@@ -20,6 +22,9 @@ class TodoListProvider extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => networkBloc,
+        ),
+        BlocProvider(
+          create: (context) => remoteConfigBloc,
         ),
       ],
       child: const NetworkStatusScreen(),

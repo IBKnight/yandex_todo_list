@@ -4,7 +4,7 @@ import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_
 import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/core/router/router.dart';
-import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
+import 'package:yandex_todo_list/src/features/todos_list/blocs/todo_list_bloc/todo_list_bloc.dart';
 import '../../../common/palette.dart';
 import 'widgets/todo_appbar.dart';
 import 'widgets/todo_tile.dart';

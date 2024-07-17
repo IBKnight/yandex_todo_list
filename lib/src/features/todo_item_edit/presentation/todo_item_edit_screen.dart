@@ -6,7 +6,7 @@ import 'package:yandex_todo_list/src/common/palette.dart';
 import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/core/router/router.dart';
-import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
+import 'package:yandex_todo_list/src/features/todos_list/blocs/todo_list_bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
 
 part 'package:yandex_todo_list/src/features/todo_item_edit/presentation/widgets/description_text_field.dart';

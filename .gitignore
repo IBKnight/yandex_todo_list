@@ -54,6 +54,3 @@ gen/
 
 # debug
 launch.json
-
-# firebase
-lib/firebase_options.dart
