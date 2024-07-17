@@ -18,7 +18,7 @@
   - Реализована отправка репортов в Crashlytics
   - Реализована отправка ивентов Analytics
 - Реализованы 2 флейвора production и development
-- 
+- Имеется поддержка landscape режима
 
 
 ## Диплинки
@@ -36,7 +36,7 @@ sh scripts/setup.sh
 Внутри скрипта без fvm указано, если надо - добавьте
 
 
-Чтобы запустить в дебаге, надо создать `launch.json`, в него вставляете этот код с подстановкой вашего токена(`APP_TOKEN`) и `BASE_URL`
+Чтобы запустить в дебаге, надо создать `launch.json`,в него вставляете этот код с подстановкой вашего токена(`APP_TOKEN`) и `BASE_URL`
 ```json
 {
     "configurations": [
@@ -51,7 +51,8 @@ sh scripts/setup.sh
                 "--dart-define",
                 "APP_TOKEN=<...>",
             ],
-            // Чтобы убедиться в работоспособности flavors добавляем args. Тогда у названия будет приписка DEV
+            // Чтобы убедиться в работоспособности flavors добавляем args.
+            // Тогда у названия будет приписка DEV
             "args": [
                 "--flavor", "development"
             ]
@@ -81,4 +82,4 @@ flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL
 </div>
 
 ## Ссылка на .APK
-### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.13)
+### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.14)
