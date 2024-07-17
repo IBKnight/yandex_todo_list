@@ -14,6 +14,11 @@
 - Предусмотрена работа в оффлайн режиме.
 - В случае возниковения ошибок появляется SnackBar с указанием ошибки и с кнопкой обновления списка.
 - Реализована поддержка диплинков.
+- Интеграция с Firebase:
+  - Реализована отправка репортов в Crashlytics
+  - Реализована отправка ивентов Analytics
+- Реализованы 2 флейвора production и development
+- 
 
 
 ## Диплинки
@@ -45,6 +50,10 @@ sh scripts/setup.sh
                 "BASE_URL=<...>",
                 "--dart-define",
                 "APP_TOKEN=<...>",
+            ],
+            // Чтобы убедиться в работоспособности flavors добавляем args. Тогда у названия будет приписка DEV
+            "args": [
+                "--flavor", "development"
             ]
         }
     ]
@@ -57,7 +66,7 @@ flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL
 
 ## Скриншотики
 
-<div  style="display: flex; justify-content: center;">
+<div  style=" justify-content: center;">
     <img src="assets/screenshots/screenshot1.png" alt="Screenshot 1" style="width: 100px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot2.png" alt="Screenshot 2" style="width: 100px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot3.png" alt="Screenshot 3" style="width: 100px; margin-right: 10px;">
@@ -65,7 +74,11 @@ flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL
     <img src="assets/screenshots/screenshot5.png" alt="Screenshot 5" style="width: 100px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot6.png" alt="Screenshot 6" style="width: 100px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot7.png" alt="Screenshot 7" style="width: 100px; margin-right: 10px;">
+    <img src="assets/screenshots/screenshot8.png" alt="Screenshot 8" margin-right: 10px;">
+    <img src="assets/screenshots/screenshot9.png" alt="Screenshot 9" style="width: 200px; margin-right: 10px;">
+    <img src="assets/screenshots/screenshot10.png" alt="Screenshot 10" margin-right: 10px;">
+
 </div>
 
 ## Ссылка на .APK
-### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.11)
+### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.12)

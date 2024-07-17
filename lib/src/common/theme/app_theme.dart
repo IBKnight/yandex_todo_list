@@ -100,6 +100,16 @@ abstract class AppTheme {
           surface: Palette.blueDark,
           onSurface: Palette.labelPrimaryDark,
         ),
+        snackBarTheme: const SnackBarThemeData(
+          actionBackgroundColor: Palette.colorWhiteLight,
+          actionTextColor: Palette.labelPrimaryLight,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(12),
+            ),
+          ),
+          backgroundColor: Palette.redLight,
+        ),
         extensions: const [
           BrandColors(
             overlay: Palette.overlayDark,
