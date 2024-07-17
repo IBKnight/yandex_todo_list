@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
-import '../../../../common/palette.dart';
 
 class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
   final int completedCount;

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
-import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
+import 'package:yandex_todo_list/src/core/router/router.dart';
 
 import '../../../../common/palette.dart';
 import '../../../../core/utils/extensions/icons_extension.dart';
@@ -65,10 +63,7 @@ class _TodoTileState extends State<TodoTile> {
         contentPadding: EdgeInsets.zero,
         trailing: IconButton(
           onPressed: () {
-            context.push(
-              '/edit/${widget.item.id}',
-              extra: BlocProvider.of<TodoListBloc>(context),
-            );
+            AppRouter.toEditScreen(id: widget.item.id);
           },
           icon: Icon(
             Icons.info_outline,

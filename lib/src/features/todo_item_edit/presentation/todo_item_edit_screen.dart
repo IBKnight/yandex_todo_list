@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:yandex_todo_list/src/common/palette.dart';
 import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
+import 'package:yandex_todo_list/src/core/router/router.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
 
@@ -51,10 +52,8 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
         elevation: 0,
         leading: IconButton(
           splashRadius: 22,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon:  Icon(
+          onPressed: () => AppRouter.backTo(),
+          icon: Icon(
             Icons.close,
             size: 22,
             color: brandColors.labelPrimary,
@@ -284,7 +283,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             );
       }
     }
-    Navigator.of(context).pop();
+    AppRouter.backTo();
   }
 
   void _deletePress() {
@@ -300,6 +299,6 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
             );
       }
     }
-    Navigator.pop(context);
+    AppRouter.backTo();
   }
 }

@@ -51,5 +51,9 @@ gen/
 # generated
 *.freezed.dart
 *.g.dart
+
 # debug
 launch.json
+
+# firebase
+lib/firebase_options.dart

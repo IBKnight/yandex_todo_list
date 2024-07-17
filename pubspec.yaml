@@ -52,6 +52,9 @@ dependencies:
 
   # Connection Status
   connectivity_plus: ^6.0.3
+  firebase_crashlytics: ^4.0.3
+  firebase_analytics: ^11.2.0
+  firebase_core: ^3.2.0
 
 dev_dependencies:
   flutter_test:

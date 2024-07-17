@@ -1,6 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_todo_list/src/app.dart';
@@ -24,9 +25,16 @@ final class AppRunner {
 
     binding.deferFirstFrame();
 
-    FlutterError.onError = logger.logFlutterError;
-    WidgetsBinding.instance.platformDispatcher.onError =
-        logger.logPlatformDispatcherError;
+    FlutterError.onError = (errorDetails) {
+      logger.logFlutterError(errorDetails);
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+
+    WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
+      logger.logPlatformDispatcherError(error, stack);
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
 
     Bloc.observer = AppBlocObserver(logger);
     Bloc.transformer = sequential();

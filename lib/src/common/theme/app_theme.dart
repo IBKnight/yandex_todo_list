@@ -92,11 +92,11 @@ abstract class AppTheme {
         colorScheme: const ColorScheme(
           brightness: Brightness.dark,
           primary: Palette.blueDark,
-          onPrimary: Palette.blueDark,
+          onPrimary: Palette.labelPrimaryDark,
           secondary: Palette.blueDark,
-          onSecondary: Palette.colorWhiteDark,
-          error: Colors.amber,
-          onError: Colors.amber,
+          onSecondary: Palette.labelPrimaryDark,
+          error: Palette.redDark,
+          onError: Palette.redDark,
           surface: Palette.blueDark,
           onSurface: Palette.labelPrimaryDark,
         ),
@@ -121,7 +121,6 @@ abstract class AppTheme {
         ],
         datePickerTheme: const DatePickerThemeData(
           backgroundColor: Palette.backSecondaryDark,
-          dayForegroundColor: WidgetStatePropertyAll(Palette.labelPrimaryDark),
           yearForegroundColor: WidgetStatePropertyAll(Palette.labelPrimaryDark),
           headerForegroundColor: Palette.labelPrimaryDark,
           weekdayStyle: TextStyle(color: Palette.labelTertiaryDark),

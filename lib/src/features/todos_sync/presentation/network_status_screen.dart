@@ -17,6 +17,7 @@ class NetworkStatusScreen extends StatelessWidget {
           if (state is NetworkStatusSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                duration: Durations.long3,
                 backgroundColor: Palette.greenLight,
                 content: _SnackBarContent(
                   icon: Icons.cloud_done,
@@ -27,6 +28,7 @@ class NetworkStatusScreen extends StatelessWidget {
           } else if (state is NetworkStatusFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                duration: Durations.long3,
                 backgroundColor: Palette.colorGrayLight,
                 content: _SnackBarContent(
                   icon: Icons.cloud_off,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:yandex_todo_list/src/common/theme/theme_extensions/brand_colors_theme_ex.dart';
 import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
+import 'package:yandex_todo_list/src/core/router/router.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 import '../../../common/palette.dart';
 import 'widgets/todo_appbar.dart';
@@ -47,7 +47,7 @@ class _TodosListScreenState extends State<TodosListScreen> {
         },
         builder: (context, state) {
           if (state is TodoListLoading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -122,7 +122,9 @@ class _TodosListScreenState extends State<TodosListScreen> {
                                   color: brandColors.labelTertiary,
                                 ),
                               ),
-                              onTap: () => context.push('/add'),
+                              onTap: () {
+                                AppRouter.toAddScreen();
+                              },
                             );
                           }
                           return TodoTile(
@@ -166,7 +168,9 @@ class _TodosListScreenState extends State<TodosListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/add'),
+        onPressed: () {
+          AppRouter.toAddScreen();
+        },
         child: const Icon(Icons.add),
       ),
     );
