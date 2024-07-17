@@ -81,4 +81,4 @@ flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL
 </div>
 
 ## Ссылка на .APK
-### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.12)
+### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.13)
