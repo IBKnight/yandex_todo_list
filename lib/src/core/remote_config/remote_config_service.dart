@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:yandex_todo_list/src/core/data/rest_client.dart';
@@ -7,7 +6,6 @@ import 'package:yandex_todo_list/src/core/database/ilocal_storage.dart';
 import 'package:yandex_todo_list/src/core/remote_config/entity/importance_color_entity.dart';
 import 'package:yandex_todo_list/src/core/remote_config/models/importance_color_model.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
-import 'package:yandex_todo_list/src/features/todos_list/blocs/todo_list_bloc/todo_list_bloc.dart';
 
 class RemoteConfigService {
   final FirebaseRemoteConfig firebaseRemoteConfig;

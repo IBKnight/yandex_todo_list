@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:yandex_todo_list/src/core/remote_config/entity/importance_color_entity.dart';
 import 'package:yandex_todo_list/src/core/remote_config/remote_config_service.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 
