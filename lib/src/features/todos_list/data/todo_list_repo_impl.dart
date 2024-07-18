@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/data/rest_client.dart';
@@ -24,7 +26,7 @@ class TodoListRepository implements ITodoListRepository {
   })  : _restClient = restClient,
         _dbService = dbService;
 
-  final endpoint = '/list';
+  static const String _endpoint = '/list';
 
   @override
   Future<TodoOperationEntity> addTodo(
@@ -37,7 +39,7 @@ class TodoListRepository implements ITodoListRepository {
       final todoMap = TodoMapper.toModel(todo).toJson();
 
       final result = await _restClient.addTodo(
-        endpoint,
+        _endpoint,
         body: {'element': todoMap},
         headers: {
           'X-Last-Known-Revision': revision,
@@ -85,7 +87,7 @@ class TodoListRepository implements ITodoListRepository {
       final todoMap = TodoMapper.toModel(todo).toJson();
 
       final result = await _restClient.changeTodo(
-        endpoint,
+        _endpoint,
         todo.id,
         body: {'element': todoMap},
         headers: {
@@ -130,7 +132,7 @@ class TodoListRepository implements ITodoListRepository {
 
     try {
       final result = await _restClient.deleteTodo(
-        endpoint,
+        _endpoint,
         id,
         headers: {
           'X-Last-Known-Revision': revision,
@@ -168,20 +170,32 @@ class TodoListRepository implements ITodoListRepository {
   Future<TodoOperationEntity> getTodo(String id) async {
     try {
       final model = TodoOperationModel.fromJson(
-        await _restClient.getTodo(endpoint, id) ?? {},
+        await _restClient.getTodo(_endpoint, id) ?? {},
       );
 
       return TodoOperationMapper.toEntity(model);
-    } catch (e, stackTrace) {
-      logger.error('', error: e, stackTrace: stackTrace);
-      rethrow;
+    } catch (e) {
+      final json = await _dbService.getTodo(id);
+
+      log(json.toString());
+
+      final model = TodoModel.fromJson(json);
+      final revision = await _dbService.getRevision();
+
+      final resultModel = TodoOperationModel(
+        element: model,
+        status: 'ok',
+        revision: revision,
+      );
+
+      return TodoOperationMapper.toEntity(resultModel);
     }
   }
 
   @override
   Future<TodoListEntity> getTodoList() async {
     try {
-      final jsonResponse = await _restClient.getTodoList(endpoint) ?? {};
+      final jsonResponse = await _restClient.getTodoList(_endpoint) ?? {};
 
       final model = TodoListModel.fromJson(jsonResponse);
 
@@ -205,7 +219,7 @@ class TodoListRepository implements ITodoListRepository {
       final todoMap = TodoListMapper.toModel(todoList).toJson();
 
       final result = await _restClient.addTodo(
-        endpoint,
+        _endpoint,
         body: {'list': todoMap['list']},
         headers: {
           'X-Last-Known-Revision': todoList.revision,

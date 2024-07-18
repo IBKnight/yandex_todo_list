@@ -62,7 +62,7 @@ sh scripts/setup.sh
 ```
 Тесты также запускаются с флагом **--dart-define**
 ```
-flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL=<BASE_URL> --dart-define APP_TOKEN=<YOUR_TOKEN>
+flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL=<BASE_URL> --dart-define APP_TOKEN=<YOUR_TOKEN> --flavor development
 ```
 
 ## Скриншотики
