@@ -19,6 +19,7 @@
   - Реализована отправка ивентов Analytics
 - Реализованы 2 флейвора production и development
 - Имеется поддержка landscape режима
+- Перключение тёмной/светлой темы в зависимости от системной
 
 
 ## Диплинки
@@ -75,6 +76,8 @@ flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL
     <img src="assets/screenshots/screenshot5.png" alt="Screenshot 5" style="width: 100px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot6.png" alt="Screenshot 6" style="width: 100px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot7.png" alt="Screenshot 7" style="width: 100px; margin-right: 10px;">
+    <img src="assets/screenshots/screenshot11.png" alt="dark_theme" style="width: 100px; margin-right: 10px;">
+    <img src="assets/screenshots/screenshot12.png" alt="landscape_mode" style="width: 300px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot8.png" alt="Screenshot 8" margin-right: 10px;">
     <img src="assets/screenshots/screenshot9.png" alt="Screenshot 9" style="width: 200px; margin-right: 10px;">
     <img src="assets/screenshots/screenshot10.png" alt="Screenshot 10" margin-right: 10px;">
