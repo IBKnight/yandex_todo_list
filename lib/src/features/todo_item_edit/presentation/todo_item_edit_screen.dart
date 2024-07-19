@@ -103,7 +103,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
                   return PopupMenuItem<TodoImportance>(
                     value: importance,
                     child: Text(
-                      fromImportance(importance, strings),
+                      _fromImportance(item: importance, strings: strings),
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: importance == TodoImportance.important
                             ? brandColors.red
@@ -113,7 +113,7 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
                   );
                 }).toList(),
                 child: Text(
-                  fromImportance(_selectedImportance, strings),
+                  _fromImportance(item: _selectedImportance, strings: strings),
                   style: theme.textTheme.bodySmall
                       ?.copyWith(color: brandColors.labelTertiary),
                 ),
@@ -234,7 +234,10 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
     });
   }
 
-  String fromImportance(TodoImportance item, AppLocalizations strings) {
+  String _fromImportance({
+    required TodoImportance item,
+    required AppLocalizations strings,
+  }) {
     switch (item) {
       case TodoImportance.low:
         return strings.low;
@@ -248,40 +251,43 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
   void _saveButtonPress(BuildContext context) {
     final item = todoEntity;
     final state = BlocProvider.of<TodoListBloc>(context).state;
-    if (state is TodoListLoaded) {
-      if (item == null) {
-        context.read<TodoListBloc>().add(
-              TodoListAdd(
-                listEntity: state.todoListEntity,
-                todoEntity: TodoEntity(
-                  id: const Uuid().v4(),
-                  text: _textEditingController.text,
-                  importance: _selectedImportance,
-                  deadline: _dateTime?.millisecondsSinceEpoch,
-                  done: false,
-                  createdAt: DateTime.now().millisecondsSinceEpoch,
-                  changedAt: DateTime.now().millisecondsSinceEpoch,
-                  lastUpdatedBy: '1',
-                ),
+
+    if (state is! TodoListLoaded) {
+      return AppRouter.backTo();
+    }
+
+    if (item == null) {
+      context.read<TodoListBloc>().add(
+            TodoListAdd(
+              listEntity: state.todoListEntity,
+              todoEntity: TodoEntity(
+                id: const Uuid().v4(),
+                text: _textEditingController.text,
+                importance: _selectedImportance,
+                deadline: _dateTime?.millisecondsSinceEpoch,
+                done: false,
+                createdAt: DateTime.now().millisecondsSinceEpoch,
+                changedAt: DateTime.now().millisecondsSinceEpoch,
+                lastUpdatedBy: '1',
               ),
-            );
-      } else {
-        context.read<TodoListBloc>().add(
-              TodoListChange(
-                listEntity: state.todoListEntity,
-                todoEntity: TodoEntity(
-                  id: item.id,
-                  text: _textEditingController.text,
-                  importance: _selectedImportance,
-                  deadline: _dateTime?.millisecondsSinceEpoch,
-                  done: item.done,
-                  createdAt: item.createdAt,
-                  changedAt: DateTime.now().millisecondsSinceEpoch,
-                  lastUpdatedBy: item.lastUpdatedBy,
-                ),
+            ),
+          );
+    } else {
+      context.read<TodoListBloc>().add(
+            TodoListChange(
+              listEntity: state.todoListEntity,
+              todoEntity: TodoEntity(
+                id: item.id,
+                text: _textEditingController.text,
+                importance: _selectedImportance,
+                deadline: _dateTime?.millisecondsSinceEpoch,
+                done: item.done,
+                createdAt: item.createdAt,
+                changedAt: DateTime.now().millisecondsSinceEpoch,
+                lastUpdatedBy: item.lastUpdatedBy,
               ),
-            );
-      }
+            ),
+          );
     }
     AppRouter.backTo();
   }
@@ -289,15 +295,18 @@ class _TodoItemEditScreenState extends State<TodoItemEditScreen> {
   void _deletePress() {
     final item = todoEntity;
     final state = BlocProvider.of<TodoListBloc>(context).state;
-    if (state is TodoListLoaded) {
-      if (item != null) {
-        context.read<TodoListBloc>().add(
-              TodoListDelete(
-                listEntity: state.todoListEntity,
-                id: item.id,
-              ),
-            );
-      }
+
+    if (state is! TodoListLoaded) {
+      return AppRouter.backTo();
+    }
+
+    if (item != null) {
+      context.read<TodoListBloc>().add(
+            TodoListDelete(
+              listEntity: state.todoListEntity,
+              id: item.id,
+            ),
+          );
     }
     AppRouter.backTo();
   }

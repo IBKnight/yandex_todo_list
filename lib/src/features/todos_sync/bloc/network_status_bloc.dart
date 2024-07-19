@@ -28,6 +28,7 @@ class NetworkStatusBloc extends Bloc<NetworkStatusEvent, NetworkStatusState> {
     );
 
     _networkSub = connectivity.onConnectivityChanged
+        .distinct()
         .listen((List<ConnectivityResult> result) {
       log(result.toString());
       if (result.last == ConnectivityResult.none) {

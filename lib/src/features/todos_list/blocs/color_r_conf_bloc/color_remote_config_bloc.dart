@@ -21,7 +21,7 @@ class ColorRemoteConfigBloc
       : super(ColorRemoteConfigLoading()) {
     on<ColorRemoteConfigChange>((event, emit) => _changeColor(event, emit));
 
-    _remoteConfigSub = remoteConfigService.changeStream.listen(
+    _remoteConfigSub = remoteConfigService.changeStream.distinct().listen(
       (remoteConfigUpdate) {
         if (remoteConfigUpdate.color != null) {
           log('fsfsfdsfd');

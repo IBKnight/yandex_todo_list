@@ -17,6 +17,8 @@
 - Интеграция с Firebase:
   - Реализована отправка репортов в Crashlytics
   - Реализована отправка ивентов Analytics
+  - Реализована смена цвета важных чек-боксов через Firebase Remote Config
+  - Приложения помимо релизов в гитхабе размещаются в App Distribution
 - Реализованы 2 флейвора production и development
 - Имеется поддержка landscape режима
 - Перключение тёмной/светлой темы в зависимости от системной
@@ -85,4 +87,4 @@ flutter test integration_test/tests/change_done_test.dart --dart-define BASE_URL
 </div>
 
 ## Ссылка на .APK
-### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.14)
+### [Ссылочка на .apk](https://github.com/IBKnight/yandex_todo_list/releases/tag/v1.0.18)
