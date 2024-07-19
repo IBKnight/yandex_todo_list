@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
 
 import '../../../../common/palette.dart';
 import '../../../../core/utils/extensions/icons_extension.dart';
-import '../../../todo_item_edit/presentation/todo_item_edit_screen.dart';
 
 import '../../domain/entities/todo_item/todo_entity.dart';
 
@@ -69,7 +69,7 @@ class _TodoTileState extends State<TodoTile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final locale = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context);
     return Dismissible(
       key: Key(widget.item.id.toString()),
       onDismissed: _onDismiss,
@@ -90,21 +90,15 @@ class _TodoTileState extends State<TodoTile> {
         contentPadding: EdgeInsets.zero,
         trailing: IconButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => BlocProvider<TodoListBloc>.value(
-                  value: BlocProvider.of<TodoListBloc>(context),
-                  child: TodoItemEditScreen(
-                    todoEntity: widget.item,
-                  ),
-                ),
-              ),
+            context.push(
+              '/edit/${widget.item.id}',
+              extra: BlocProvider.of<TodoListBloc>(context),
             );
           },
           icon: const Icon(Icons.info_outline),
         ),
         leading: Checkbox(
+          key: ValueKey('checkbox_${widget.item.id}'),
           value: _isChecked,
 
           /// Выбор цвета в зависимости от стейта чекбокса

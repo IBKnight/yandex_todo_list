@@ -19,7 +19,7 @@ class TodoSliverPersistentDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final strings = AppLocalizations.of(context)!;
+    final strings = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final progress = shrinkOffset / maxExtent;
 

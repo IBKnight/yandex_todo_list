@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'rest_client.dart';
 
-base class DioClient extends RestClient {
+class DioClient extends RestClient {
   final Dio dio;
 
   DioClient({required this.dio});
@@ -29,7 +29,7 @@ base class DioClient extends RestClient {
   }
 
   @override
-  Future<Map<String, Object?>?> getList(
+  Future<Map<String, Object?>?> getTodoList(
     String path, {
     Map<String, Object?>? headers,
     Map<String, String?>? queryParams,
@@ -63,32 +63,8 @@ base class DioClient extends RestClient {
     }
   }
 
-  /// Request body
-  /// ```json
-  /// {
-  /// "list": [
-  ///     {
-  ///         "color": "<hex color>",
-  ///         "importance": <"low"|"basic"|"important">,
-  ///         "done": <bool>,
-  ///         "created_at": <timestamp>,
-  ///         "id": "<uuid>",
-  ///         "text": "some text",
-  ///         "changed_at": <timestamp>,
-  ///         "deadline": <timestamp>,
-  ///         "last_updated_by": "123"
-  ///     },
-  ///     ...
-  /// ]
-  /// }
-  /// ```
-  ///
-  /// header
-  /// ```
-  /// "X-Last-Known-Revision": <current revision>
-  /// ```
   @override
-  Future<Map<String, Object?>?> updateList(
+  Future<Map<String, Object?>?> updateTodoList(
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
@@ -109,27 +85,6 @@ base class DioClient extends RestClient {
     }
   }
 
-  /// Request body
-  /// ```json
-  /// {
-  ///    "element": {
-  ///         "color": "<hex color>",
-  ///         "importance": <"low"|"basic"|"important">,
-  ///         "done": <bool>,
-  ///         "created_at": <timestamp>,
-  ///         "id": "<uuid>",
-  ///         "text": "some text",
-  ///         "changed_at": <timestamp>,
-  ///         "deadline": <timestamp>,
-  ///         "last_updated_by": "123"
-  ///     }
-  /// }
-  /// ```
-  ///
-  /// Header
-  /// ```
-  /// "X-Last-Known-Revision": <current revision>
-  /// ```
   @override
   Future<Map<String, Object?>?> addTodo(
     String path, {
@@ -152,27 +107,6 @@ base class DioClient extends RestClient {
     }
   }
 
-  /// Request body
-  /// ```json
-  /// {
-  ///    "element": {
-  ///         "color": "<hex color>",
-  ///         "importance": <"low"|"basic"|"important">,
-  ///         "done": <bool>,
-  ///         "created_at": <timestamp>,
-  ///         "id": "<uuid>",
-  ///         "text": "some text",
-  ///         "changed_at": <timestamp>,
-  ///         "deadline": <timestamp>,
-  ///         "last_updated_by": "123"
-  ///     }
-  /// }
-  /// ```
-  ///
-  /// Header
-  /// ```
-  /// "X-Last-Known-Revision": <current revision>
-  /// ```
   @override
   Future<Map<String, Object?>?> changeTodo(
     String path,

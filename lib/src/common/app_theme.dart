@@ -4,6 +4,16 @@ import 'palette.dart';
 abstract class AppTheme {
   static ThemeData get lightTheme => ThemeData(
         scaffoldBackgroundColor: Palette.backPrimaryLight,
+        snackBarTheme: const SnackBarThemeData(
+          actionBackgroundColor: Palette.colorWhiteLight,
+          actionTextColor: Palette.labelPrimaryLight,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(12),
+            ),
+          ),
+          backgroundColor: Palette.redLight,
+        ),
         dividerTheme: const DividerThemeData(
           thickness: 0.5,
           color: Palette.separatorLight,

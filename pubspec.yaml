@@ -21,6 +21,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  # Routing
+  go_router: ^14.2.0
+
   # Networking
   dio: ^5.4.3+1
 
@@ -47,6 +50,9 @@ dependencies:
 
   meta: ^1.12.0
 
+  # Connection Status
+  connectivity_plus: ^6.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -58,6 +64,12 @@ dev_dependencies:
   build_runner: ^2.4.11
   freezed: ^2.5.2
   json_serializable: ^6.8.0
+
+  # Tests
+  mockito: ^5.4.4
+
+  integration_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

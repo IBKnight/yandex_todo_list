@@ -20,7 +20,7 @@ class FailedInitScreen extends StatelessWidget {
           builder: (context) {
             return Center(
               child: Text(
-                AppLocalizations.of(context)!.initFail,
+                AppLocalizations.of(context).initFail,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             );
