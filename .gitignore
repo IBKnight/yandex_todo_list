@@ -51,5 +51,6 @@ gen/
 # generated
 *.freezed.dart
 *.g.dart
+
 # debug
 launch.json

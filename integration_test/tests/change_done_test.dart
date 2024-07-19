@@ -1,5 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -7,9 +9,11 @@ import 'package:uuid/v4.dart';
 import 'package:yandex_todo_list/src/app.dart';
 import 'package:yandex_todo_list/src/core/data/dio_client.dart';
 import 'package:yandex_todo_list/src/core/database/db_service.dart';
+import 'package:yandex_todo_list/src/core/remote_config/remote_config_service.dart';
 import 'package:yandex_todo_list/src/features/initialization/dependencies.dart';
 import 'package:yandex_todo_list/src/features/initialization/widgets/dependencies_scope.dart';
-import 'package:yandex_todo_list/src/features/todos_list/bloc/todo_list_bloc.dart';
+import 'package:yandex_todo_list/src/features/todos_list/blocs/color_r_conf_bloc/color_remote_config_bloc.dart';
+import 'package:yandex_todo_list/src/features/todos_list/blocs/todo_list_bloc/todo_list_bloc.dart';
 import 'package:yandex_todo_list/src/features/todos_list/data/todo_list_repo_impl.dart';
 import 'package:yandex_todo_list/src/features/todos_list/domain/entities/todo_item/todo_entity.dart';
 import 'package:yandex_todo_list/src/features/todos_sync/bloc/network_status_bloc.dart';
@@ -19,6 +23,7 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
+  Firebase.initializeApp();
   const baseUrl = String.fromEnvironment('BASE_URL');
   const token = String.fromEnvironment('APP_TOKEN');
   final id = const UuidV4().generate();
@@ -55,10 +60,23 @@ void main() {
         syncService: syncService,
       );
 
+      final firebaseRemoteConfig = FirebaseRemoteConfig.instance;
+
+      final RemoteConfigService remoteConfigService = RemoteConfigService(
+        firebaseRemoteConfig: firebaseRemoteConfig,
+        localStorage: dbService,
+        restClient: dioClient,
+      );
+
+      final ColorRemoteConfigBloc colorRemoteConfigBloc = ColorRemoteConfigBloc(
+        remoteConfigService: remoteConfigService,
+      );
+
       dependencies = Dependencies(
         todoListBloc: todoListBloc,
         todoListRepo: repository,
         networkStatusBloc: networkStatusBloc,
+        colorRemoteConfigBloc: colorRemoteConfigBloc,
       );
 
       // Создаем тестовую задачу и добавляем ее через репозиторий

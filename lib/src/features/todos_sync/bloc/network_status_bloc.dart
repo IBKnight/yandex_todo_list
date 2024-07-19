@@ -28,6 +28,7 @@ class NetworkStatusBloc extends Bloc<NetworkStatusEvent, NetworkStatusState> {
     );
 
     _networkSub = connectivity.onConnectivityChanged
+        .distinct()
         .listen((List<ConnectivityResult> result) {
       log(result.toString());
       if (result.last == ConnectivityResult.none) {
@@ -39,6 +40,7 @@ class NetworkStatusBloc extends Bloc<NetworkStatusEvent, NetworkStatusState> {
   }
   @override
   Future<void> close() async {
+    _networkSub?.cancel();
     super.close();
     _networkSub = null;
   }

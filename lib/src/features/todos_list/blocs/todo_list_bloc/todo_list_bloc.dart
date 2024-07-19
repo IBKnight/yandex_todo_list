@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:yandex_todo_list/src/common/analytics_service.dart';
 import 'package:yandex_todo_list/src/core/data/exceptions/network_exception.dart';
 import 'package:yandex_todo_list/src/core/utils/logger.dart';
 import 'package:yandex_todo_list/src/features/todo_item_edit/domain/entities/todo_operation_entity.dart';
@@ -41,6 +42,8 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         event.todoEntity,
         event.listEntity.revision,
       );
+
+      AnalyticsService.sendAddEvent(event.todoEntity);
 
       final List<TodoEntity> updatedListEntity =
           List<TodoEntity>.from(event.listEntity.list)..add(newEntity.element);
@@ -102,6 +105,8 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
         event.listEntity.revision,
       );
 
+      AnalyticsService.sendUpdateEvent(event.todoEntity);
+
       // Копируем текущий listEntity
       final List<TodoEntity> updatedListEntity =
           List<TodoEntity>.from(event.listEntity.list);
@@ -151,6 +156,8 @@ class TodoListBloc extends Bloc<TodoListEvent, TodoListState> {
       final index = updatedListEntity.indexWhere((todo) => todo.id == event.id);
 
       if (index != -1) {
+        AnalyticsService.sendDeleteEvent(updatedListEntity[index]);
+
         updatedListEntity.removeAt(index);
       }
 

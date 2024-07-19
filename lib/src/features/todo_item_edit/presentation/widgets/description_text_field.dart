@@ -9,6 +9,9 @@ class _DescriptionTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final brandColors = Theme.of(context).extension<BrandColors>()!;
+
     return Container(
       margin: const EdgeInsetsDirectional.symmetric(horizontal: 16),
       constraints: BoxConstraints(
@@ -30,7 +33,7 @@ class _DescriptionTextField extends StatelessWidget {
             color: Palette.shadowColor.withOpacity(0.12),
           ),
         ],
-        color: Palette.backElevatedLight,
+        color: brandColors.backSecondary,
       ),
       child: TextField(
         controller: _textEditingController,
@@ -39,6 +42,7 @@ class _DescriptionTextField extends StatelessWidget {
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: AppLocalizations.of(context).whatNeedToDo,
+          hintStyle: Theme.of(context).textTheme.bodyLarge,
           contentPadding: const EdgeInsetsDirectional.all(16),
         ),
         keyboardType: TextInputType.multiline,

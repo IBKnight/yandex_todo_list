@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yandex_todo_list/src/common/app_theme.dart';
+import 'package:yandex_todo_list/src/common/theme/app_theme.dart';
 import 'package:yandex_todo_list/src/core/localization/gen/app_localizations.dart';
 import 'package:yandex_todo_list/src/core/localization/localization.dart';
 
